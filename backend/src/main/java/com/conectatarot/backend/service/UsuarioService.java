@@ -25,22 +25,35 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Usuario registrarUsuario(Usuario usuario) {
+	public Usuario registrarUsuario(Usuario usuario) {
 
-        Optional<Usuario> existente = usuarioRepository.findByEmail(usuario.getEmail());
+		Optional<Usuario> existente = usuarioRepository.findByEmail(usuario.getEmail());
 
-        if (existente.isPresent()) {
-            throw new RuntimeException("El email ya está registrado");
-        }
+		if (existente.isPresent()) {
+		    throw new RuntimeException("El email ya está registrado");
+		}
 
-        Rol rolCliente = rolRepository.findByNombreRol("CLIENTE")
-                .orElseThrow(() -> new RuntimeException("Rol CLIENTE no encontrado"));
+		Rol rolCliente = rolRepository.findByNombreRol("CLIENTE")
+		        .orElseThrow(() -> new RuntimeException("Rol CLIENTE no encontrado"));
 
-        usuario.setRol(rolCliente);
-        usuario.setActivo(true);
-        usuario.setFechaRegistro(LocalDateTime.now());
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+		usuario.setRol(rolCliente);
+		usuario.setActivo(true);
+		usuario.setFechaRegistro(LocalDateTime.now());
+		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
-        return usuarioRepository.save(usuario);
-    }
+		return usuarioRepository.save(usuario);
+	}
+
+	public Usuario actualizarUsuario(Integer id, String nombre, String email) {
+		    Usuario usuario = usuarioRepository.findById(id)
+		        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		    if (nombre != null && !nombre.isEmpty()) {
+		        usuario.setNombre(nombre);
+		    }
+		    if (email != null && !email.isEmpty()) {
+		        usuario.setEmail(email);
+		    }
+		    return usuarioRepository.save(usuario);
+	}
+
 }
