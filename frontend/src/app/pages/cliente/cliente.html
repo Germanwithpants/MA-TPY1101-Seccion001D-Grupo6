@@ -1,0 +1,31 @@
+<div style="background:#1a0a2e;min-height:100vh;color:#d4aaff;font-family:Arial,sans-serif;padding:20px">
+  <div style="max-width:900px;margin:0 auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px">
+      <h1 style="color:#d4aaff">🔮 ConectaTarot</h1>
+      <div>
+        <span style="color:#9b59b6;margin-right:20px" *ngIf="usuario">Hola, {{usuario.nombre}}</span>
+        <button (click)="logout()" style="background:#7d3cae;color:#fff;border:none;padding:8px 16px;border-radius:20px;cursor:pointer">Cerrar sesion</button>
+      </div>
+    </div>
+
+    <h2 style="color:#e8c3ff;margin-bottom:16px">Tarotistas disponibles</h2>
+    <p *ngIf="error" style="color:#ff6b6b">{{error}}</p>
+    <p *ngIf="tarotistas.length === 0 && !error" style="color:#9b59b6">No hay tarotistas disponibles por el momento.</p>
+
+    <div *ngFor="let t of tarotistas" style="background:#2d1654;border:1px solid #7d3cae;border-radius:12px;padding:16px;margin-bottom:16px">
+      <h3 style="color:#d4aaff;margin:0 0 8px 0">🌙 {{t.nombreProfesional}}</h3>
+      <p style="color:#9b59b6;margin:4px 0">{{t.descripcion}}</p>
+      <p style="color:#60e090;margin:4px 0">Precio: ${{t.precioBase}}/hr</p>
+    </div>
+
+    <h2 style="color:#e8c3ff;margin:30px 0 16px 0">Mis sesiones</h2>
+    <p *ngIf="sesiones.length === 0" style="color:#9b59b6">No tienes sesiones agendadas.</p>
+    <div *ngFor="let s of sesiones" style="background:#2d1654;border:1px solid #7d3cae;border-radius:12px;padding:16px;margin-bottom:16px">
+      <p style="margin:4px 0;color:#d4aaff">Tarotista: {{s.nombreTarotista}}</p>
+      <p style="margin:4px 0;color:#9b59b6">Fecha: {{s.fecha}}</p>
+      <p style="margin:4px 0;color:#9b59b6">Especialidad: {{s.especialidad}}</p>
+      <p style="margin:4px 0;color:#60e090">Estado: {{s.estado}}</p>
+      <p style="margin:4px 0;color:#d4aaff">Total: ${{s.precioTotal}}</p>
+    </div>
+  </div>
+</div>
