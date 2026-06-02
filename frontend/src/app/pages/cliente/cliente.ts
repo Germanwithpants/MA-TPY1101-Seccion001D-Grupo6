@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef, NgZone } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -16,25 +16,44 @@ export class Cliente implements OnInit {
   usuario: any = null;
   error = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
     const token = localStorage.getItem('token');
-    if (!token) {
-      this.router.navigate(['/']);
-      return;
-    }
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    if (!token) { this.router.navigate(['/']); return; }
+    const headers = new HttpHeaders({ Authorization: 'Bearer ' + token });
+
     this.http.get('http://localhost:8080/api/tarotistas', { headers }).subscribe({
-      next: (res: any) => this.tarotistas = res.data || [],
+      next: (res: any) => {
+        this.zone.run(() => {
+          this.tarotistas = res.data || [];
+        });
+      },
       error: () => this.error = 'Error al cargar tarotistas'
     });
+
     this.http.get('http://localhost:8080/api/sesiones/mis-sesiones', { headers }).subscribe({
-      next: (res: any) => this.sesiones = res.data || [],
+      next: (res: any) => {
+        this.zone.run(() => {
+          this.sesiones = res.data || [];
+        });
+      },
       error: () => {}
     });
+
     this.http.get('http://localhost:8080/api/auth/perfil', { headers }).subscribe({
-      next: (res: any) => this.usuario = res.data || res,
+      next: (res: any) => {
+        this.zone.run(() => {
+          this.usuario = res.data || res;
+        });
+      },
       error: () => {}
     });
   }
@@ -44,4 +63,3 @@ export class Cliente implements OnInit {
     this.router.navigate(['/']);
   }
 }
-
