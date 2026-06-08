@@ -43,4 +43,11 @@ public class UsuarioService {
 
         return usuarioRepository.save(usuario);
     }
+    public Usuario actualizarUsuario(Integer id, String nombre, String email) {
+       Usuario usuario = usuarioRepository.findById(id)
+          .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+       usuario.setNombre(nombre);
+       usuario.setEmail(email);
+       return usuarioRepository.save(usuario); 
+    }
 }

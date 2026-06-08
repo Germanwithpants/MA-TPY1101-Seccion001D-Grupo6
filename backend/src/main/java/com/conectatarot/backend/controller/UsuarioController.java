@@ -50,4 +50,19 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
+    @PutMapping("/{id}")
+     public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody RegistroUsuarioRequest request) {
+       try {
+           Usuario usuario = usuarioService.actualizarUsuario(id, request.getNombre(), request.getEmail());
+           UsuarioResponse response = new UsuarioResponse();
+           response.setIdUsuario(usuario.getIdUsuario());
+           response.setNombre(usuario.getNombre());
+           response.setEmail(usuario.getEmail());
+           response.setRol(usuario.getRol().getNombreRol());
+           response.setActivo(usuario.getActivo());
+           return ResponseEntity.ok(response);
+       } catch (RuntimeException e) {
+       	   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+       }
+}    
 }
