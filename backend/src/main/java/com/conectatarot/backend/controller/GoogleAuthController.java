@@ -28,30 +28,34 @@ public class GoogleAuthController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/google")
-    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String nombre = body.get("nombre");
+	@PostMapping("/google")
+	public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body) {
+	    String email = body.get("email");
+	    String nombre = body.get("nombre");
 
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseGet(() -> {
-            Usuario nuevo = new Usuario();
-            nuevo.setNombre(nombre);
-            nuevo.setEmail(email);
-            nuevo.setPassword(encoder.encode("google_" + email));
-            nuevo.setRol(rolRepository.findByNombreRol("CLIENTE").orElseThrow());
-            nuevo.setActivo(true);
-            return usuarioRepository.save(nuevo);
-        });
+	    boolean[] esNuevo = {false};
 
-        String token = jwtService.generateToken(usuario.getEmail(), usuario.getRol().getNombreRol());
+	    Usuario usuario = usuarioRepository.findByEmail(email).orElseGet(() -> {
+	        esNuevo[0] = true;
+	        Usuario nuevo = new Usuario();
+	        nuevo.setNombre(nombre);
+	        nuevo.setEmail(email);
+	        nuevo.setPassword(encoder.encode("google_" + email));
+	        nuevo.setRol(rolRepository.findByNombreRol("CLIENTE").orElseThrow());
+	        nuevo.setActivo(true);
+	        return usuarioRepository.save(nuevo);
+	    });
 
-        return ResponseEntity.ok(Map.of(
-            "idUsuario", usuario.getIdUsuario(),
-            "nombre", usuario.getNombre(),
-            "email", usuario.getEmail(),
-            "rol", usuario.getRol().getNombreRol(),
-            "activo", usuario.getActivo(),
-            "token", token
-        ));
-    }
+	    String token = jwtService.generateToken(usuario.getEmail(), usuario.getRol().getNombreRol());
+
+	    return ResponseEntity.ok(Map.of(
+	        "idUsuario", usuario.getIdUsuario(),
+	        "nombre", usuario.getNombre(),
+	        "email", usuario.getEmail(),
+	        "rol", usuario.getRol().getNombreRol(),
+	        "activo", usuario.getActivo(),
+	        "token", token,
+	        "esNuevo", esNuevo[0]
+	    ));
+	}
 }
