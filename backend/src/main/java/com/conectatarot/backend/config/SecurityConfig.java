@@ -48,7 +48,7 @@ public class SecurityConfig {
         	        .requestMatchers("/api/auth/login",
         	       		 "/api/auth/google",
 		       		 "/api/usuarios",
-				 "/api/oagis/**"
+				 "/api/pagos/**"
                 )
                         .permitAll()
                         .anyRequest()
