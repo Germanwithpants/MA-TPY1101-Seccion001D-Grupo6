@@ -1,5 +1,10 @@
 # ConectaTarot — Guía de Instalación de Entorno (Setup Equipo)
 
+## 📱 Aplicación Android
+
+El código fuente de la app móvil nativa (Kotlin/Android Studio) se encuentra en la rama [`app-android`](https://github.com/matiastiznado9/MA-TPY1101-Seccion001D-Grupo6/tree/app-android) de este repositorio.
+
+
 ## Objetivo
 
 Esta guía es únicamente para que cualquier integrante clone el proyecto y pueda dejar **el mismo entorno de trabajo** funcionando que el usado en desarrollo.
@@ -424,3 +429,25 @@ Entorno base replicado correctamente cuando:
 ✅ MySQL conecta
 
 Con eso deberían tener exactamente el mismo ambiente de desarrollo.
+
+---
+
+# Estado de Despliegue (Producción - Railway)
+
+El backend está desplegado y operativo en Railway:
+
+```text
+https://ma-tpy1101-seccion001d-grupo6-production-cec7.up.railway.app
+```
+
+Base de datos MySQL 8.4 también en Railway. La app Android (rama `app-android`) consume directamente esta API en producción, sin necesidad de levantar el entorno local.
+
+## Servicios externos integrados
+
+* **Firebase Authentication** (Google Sign-In) — login social con selección de rol para usuarios nuevos
+* **Webpay Plus (Transbank, sandbox)** — pasarela de pago real en ambiente de integración
+* **Jitsi Meet** — videollamadas entre cliente y tarotista
+
+## Pruebas
+
+Ver `Plan_Pruebas_ConectaTarot_Final.docx`, `Anexo_Plan_Pruebas_Incremental.docx` e `Informe_Ejecucion_Plan_Pruebas.docx` en `docs/` para el detalle de casos de prueba ejecutados.
