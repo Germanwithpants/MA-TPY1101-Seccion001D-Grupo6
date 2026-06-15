@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ConectaTarot" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#7d3cae</item>
+        <item name="colorPrimaryDark">#2d1654</item>
+        <item name="colorAccent">#d4aaff</item>
+        <item name="android:windowBackground">#1a0a2e</item>
+    </style>
+</resources>

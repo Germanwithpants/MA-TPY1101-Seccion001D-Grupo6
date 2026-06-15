@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1a0a2e">
+
+    <TextView
+        android:id="@+id/tvVolverSesiones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="← Volver"
+        android:textColor="#9b59b6"
+        android:textSize="14sp"
+        android:padding="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📋 Mis Sesiones"
+        android:textColor="#d4aaff"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:paddingLeft="16dp"
+        android:paddingBottom="12dp"/>
+
+    <TextView
+        android:id="@+id/tvEmptySesiones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No tienes sesiones agendadas"
+        android:textColor="#9b59b6"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSesiones"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"/>
+
+</LinearLayout>

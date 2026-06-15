@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "751618758049",
+    "project_id": "conectatarot-49215",
+    "storage_bucket": "conectatarot-49215.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751618758049:android:6fa2cf23a233cdc845a7e0",
+        "android_client_info": {
+          "package_name": "com.conectatarot.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751618758049-e68ntbbm8l3f5qnnudl5bm9cujjpdb1e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.conectatarot.app",
+            "certificate_hash": "ca4515d86d05a30896021cd2209ac5ecf814d5eb"
+          }
+        },
+        {
+          "client_id": "751618758049-va742gbpc4q1g85418c2kfaubf48s562.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9FvkD95DOSRIMDfgllGPWq_5AUlYGpoE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751618758049-va742gbpc4q1g85418c2kfaubf48s562.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

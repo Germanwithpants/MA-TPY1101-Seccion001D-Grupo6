@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1a0a2e">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvVolverPerfilTarotista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Volver"
+            android:textColor="#9b59b6"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:text="🔮"
+            android:textSize="64sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:text="Mi Perfil Profesional"
+            android:textColor="#d4aaff"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:text="Esta información verán los clientes"
+            android:textColor="#9b59b6"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="32dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre profesional"
+            android:textColor="#e8c3ff"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etEditNombrePro"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Ej: Luna Estrellada"
+            android:textColor="#ffffff"
+            android:textColorHint="#9b59b6"
+            android:background="#2d1654"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textColor="#e8c3ff"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etEditDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="Cuéntales tu experiencia..."
+            android:textColor="#ffffff"
+            android:textColorHint="#9b59b6"
+            android:background="#2d1654"
+            android:padding="16dp"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Precio por hora (CLP)"
+            android:textColor="#e8c3ff"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etEditPrecio"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Ej: 15000"
+            android:textColor="#ffffff"
+            android:textColorHint="#9b59b6"
+            android:background="#2d1654"
+            android:padding="16dp"
+            android:inputType="number"
+            android:layout_marginBottom="32dp"/>
+
+        <Button
+            android:id="@+id/btnGuardarPerfilTarotista"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Guardar cambios"
+            android:textColor="#ffffff"
+            android:backgroundTint="#7d3cae"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/tvResultadoPerfilTarotista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+</ScrollView>

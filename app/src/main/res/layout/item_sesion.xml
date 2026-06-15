@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="#2d1654"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvSesionTarotista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#d4aaff"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:id="@+id/tvSesionFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#e8c3ff"
+            android:textSize="14sp"
+            android:layout_marginBottom="6dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvSesionEstado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvSesionPrecio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#60e090"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnCancelarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="Cancelar sesión"
+            android:textColor="#ffffff"
+            android:backgroundTint="#e74c3c"
+            android:textSize="13sp"
+            android:layout_marginTop="10dp"/>
+        <Button
+            android:id="@+id/btnPagarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="💳 Pagar ahora"
+            android:textColor="#ffffff"
+            android:backgroundTint="#27ae60"
+            android:textSize="13sp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/btnVideollamada"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="📹 Unirse a videollamada"
+            android:textColor="#ffffff"
+            android:backgroundTint="#3498db"
+            android:textSize="13sp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tvVideollamadaInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📹 La videollamada estará disponible 15 min antes de tu sesión"
+            android:textColor="#9b59b6"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
