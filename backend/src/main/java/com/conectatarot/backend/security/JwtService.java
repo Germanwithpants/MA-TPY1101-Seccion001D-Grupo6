@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -15,8 +16,8 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY =
-            "conectatarot_secret_key_2026_super_segura_jwt";
+    @Value("${app.jwt.secret}")
+    private String secretKey;
 
     private static final long EXPIRATION =
             1000 * 60 * 60 * 24; //24 horas
@@ -25,7 +26,7 @@ public class JwtService {
     private Key getSigningKey() {
 
         return Keys.hmacShaKeyFor(
-                SECRET_KEY.getBytes(StandardCharsets.UTF_8)
+                secretKey.getBytes(StandardCharsets.UTF_8)
         );
     }
 
