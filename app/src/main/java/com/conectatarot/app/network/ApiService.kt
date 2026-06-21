@@ -222,8 +222,7 @@ data class ResenasResponse(
 )
 
 data class GoogleLoginRequest(
-    val email: String,
-    val nombre: String
+    val idToken: String
 )
 
 data class LoginResponse(

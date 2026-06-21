@@ -119,14 +119,10 @@ class MainActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                val user = auth.currentUser
-                val nombre = user?.displayName ?: "Usuario"
-                val email = user?.email ?: ""
-
                 lifecycleScope.launch {
                     try {
                         val response = RetrofitClient.instance.googleLogin(
-                            com.conectatarot.app.network.GoogleLoginRequest(email, nombre)
+                            com.conectatarot.app.network.GoogleLoginRequest(idToken)
                         )
                         if (response.isSuccessful) {
                             val body = response.body()!!
