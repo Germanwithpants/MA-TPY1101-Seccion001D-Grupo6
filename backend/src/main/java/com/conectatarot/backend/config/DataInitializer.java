@@ -17,10 +17,15 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         for (String nombre : List.of("CLIENTE", "TAROTISTA", "ADMIN")) {
-            if (rolRepository.findByNombreRol(nombre).isEmpty()) {
-                Rol rol = new Rol();
-                rol.setNombreRol(nombre);
-                rolRepository.save(rol);
+            try {
+                if (rolRepository.findByNombreRol(nombre).isEmpty()) {
+                    Rol rol = new Rol();
+                    rol.setNombreRol(nombre);
+                    rolRepository.save(rol);
+                    System.out.println("DataInitializer: rol '" + nombre + "' creado.");
+                }
+            } catch (Exception e) {
+                System.err.println("DataInitializer: no se pudo crear rol '" + nombre + "': " + e.getMessage());
             }
         }
     }
