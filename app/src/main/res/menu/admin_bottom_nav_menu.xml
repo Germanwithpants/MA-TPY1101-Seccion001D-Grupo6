@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/admin_nav_dashboard"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="Dashboard"/>
+    <item
+        android:id="@+id/admin_nav_usuarios"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Usuarios"/>
+    <item
+        android:id="@+id/admin_nav_tarotistas"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Tarotistas"/>
+    <item
+        android:id="@+id/admin_nav_pagos"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Pagos"/>
+    <item
+        android:id="@+id/admin_nav_logs"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="Logs"/>
+</menu>

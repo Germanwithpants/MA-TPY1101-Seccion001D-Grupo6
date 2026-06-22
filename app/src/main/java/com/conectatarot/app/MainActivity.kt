@@ -114,9 +114,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val dest = when {
-            body.esNuevo -> SeleccionRolActivity::class.java
+            body.esNuevo        -> SeleccionRolActivity::class.java
+            body.rol == "ADMIN"      -> AdminPanelActivity::class.java
             body.rol == "TAROTISTA" -> TarotistaHomeActivity::class.java
-            else -> ClienteActivity::class.java
+            else                -> ClienteActivity::class.java
         }
         startActivity(Intent(this, dest))
         finish()

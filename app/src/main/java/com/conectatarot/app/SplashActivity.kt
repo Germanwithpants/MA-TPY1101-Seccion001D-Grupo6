@@ -27,8 +27,11 @@ class SplashActivity : AppCompatActivity() {
                 }
 
                 if (valid) {
-                    val dest = if (rol == "TAROTISTA") TarotistaHomeActivity::class.java
-                               else ClienteActivity::class.java
+                    val dest = when (rol) {
+                        "TAROTISTA" -> TarotistaHomeActivity::class.java
+                        "ADMIN"     -> AdminPanelActivity::class.java
+                        else        -> ClienteActivity::class.java
+                    }
                     startActivity(Intent(this@SplashActivity, dest))
                     finish()
                     return@launch

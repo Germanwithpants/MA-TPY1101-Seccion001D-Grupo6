@@ -54,6 +54,7 @@
             android:windowSoftInputMode="adjustResize"/>
 
         <activity android:name=".DisponibilidadActivity"/>
+        <activity android:name=".AdminPanelActivity"/>
 
         <service
             android:name=".MyFirebaseMessagingService"

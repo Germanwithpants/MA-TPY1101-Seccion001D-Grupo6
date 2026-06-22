@@ -127,6 +127,37 @@ interface ApiService {
 
     @GET("api/pagos/estado/{sesionId}")
     suspend fun estadoPago(@Path("sesionId") sesionId: Int): Response<EstadoPagoResponse>
+
+    // Admin
+    @GET("api/admin/estadisticas")
+    suspend fun getAdminEstadisticas(@Header("Authorization") token: String): Response<AdminEstadisticasResponse>
+
+    @GET("api/admin/usuarios")
+    suspend fun getAdminUsuarios(@Header("Authorization") token: String): Response<AdminUsuariosResponse>
+
+    @PUT("api/admin/usuarios/{id}/bloquear")
+    suspend fun bloquearUsuario(@Header("Authorization") token: String, @Path("id") id: Int): Response<Any>
+
+    @PUT("api/admin/usuarios/{id}/desbloquear")
+    suspend fun desbloquearUsuario(@Header("Authorization") token: String, @Path("id") id: Int): Response<Any>
+
+    @GET("api/admin/tarotistas/pendientes")
+    suspend fun getTarotistasPendientes(@Header("Authorization") token: String): Response<AdminTarotistasResponse>
+
+    @PUT("api/admin/tarotistas/{id}/aprobar")
+    suspend fun aprobarTarotista(@Header("Authorization") token: String, @Path("id") id: Int): Response<Any>
+
+    @PUT("api/admin/tarotistas/{id}/rechazar")
+    suspend fun rechazarTarotista(@Header("Authorization") token: String, @Path("id") id: Int): Response<Any>
+
+    @GET("api/admin/pagos")
+    suspend fun getAdminPagos(@Header("Authorization") token: String): Response<AdminPagosResponse>
+
+    @GET("api/admin/comisiones")
+    suspend fun getAdminComisiones(@Header("Authorization") token: String): Response<AdminComisionesResponse>
+
+    @GET("api/admin/logs")
+    suspend fun getAdminLogs(@Header("Authorization") token: String): Response<AdminLogsResponse>
 }
 
 // ── Data Classes ──────────────────────────────────────────────────────────────
@@ -243,3 +274,23 @@ data class ResenasResponse(val success: Boolean, val data: List<ResenaItem>?, va
 
 data class IniciarPagoResponse(val success: Boolean, val url: String?, val token: String?)
 data class EstadoPagoResponse(val success: Boolean, val estadoPago: String?)
+
+// Admin data classes
+data class AdminUsuario(val idUsuario: Int, val nombre: String, val email: String, val rol: String?, val activo: Boolean?)
+data class AdminUsuariosResponse(val success: Boolean, val data: List<AdminUsuario>?)
+
+data class AdminTarotistaPendiente(val id: Int, val nombreProfesional: String, val descripcion: String?, val precioBase: Double?, val estado: String?)
+data class AdminTarotistasResponse(val success: Boolean, val data: List<AdminTarotistaPendiente>?)
+
+data class AdminPagoItem(val sesionId: Int, val monto: Double, val fecha: String, val estadoPago: String, val tarotista: String, val cliente: String)
+data class AdminPagosResponse(val success: Boolean, val data: List<AdminPagoItem>?)
+
+data class AdminComisionItem(val sesionId: Int, val fecha: String, val monto: Double, val comision: Double, val tarotista: String)
+data class AdminComisionesData(val totalComisiones: Double, val cantidad: Int, val detalle: List<AdminComisionItem>)
+data class AdminComisionesResponse(val success: Boolean, val data: AdminComisionesData?)
+
+data class AdminEstadisticasData(val totalUsuarios: Long, val usuariosActivos: Long, val totalSesiones: Long, val tarotistaActivos: Long, val ingresoTotal: Double)
+data class AdminEstadisticasResponse(val success: Boolean, val data: AdminEstadisticasData?)
+
+data class AdminLogItem(val id: Long, val accion: String, val entidad: String?, val entidadId: String?, val adminEmail: String?, val detalle: String?, val timestamp: String)
+data class AdminLogsResponse(val success: Boolean, val data: List<AdminLogItem>?)
