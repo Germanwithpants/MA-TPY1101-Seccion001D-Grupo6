@@ -45,14 +45,15 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-        	        .requestMatchers("/api/auth/login",
-        	       		 "/api/auth/google",
-		       		 "/api/usuarios",
-				 "/api/pagos/**"
-                )
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/pagos/mis-pagos").authenticated()
+                        .requestMatchers(
+                                "/api/auth/login",
+                                "/api/auth/google",
+                                "/api/usuarios",
+                                "/api/pagos/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
 
                 .addFilterBefore(

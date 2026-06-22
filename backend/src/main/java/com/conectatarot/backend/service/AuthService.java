@@ -43,6 +43,10 @@ public class AuthService {
             throw new RuntimeException("Credenciales inválidas");
         }
 
+        if (!Boolean.TRUE.equals(usuario.getActivo())) {
+            throw new RuntimeException("Cuenta desactivada");
+        }
+
         String token = jwtService.generateToken(
                 usuario.getEmail(),
                 usuario.getRol().getNombreRol()

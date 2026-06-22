@@ -48,6 +48,13 @@ public class UsuarioService {
           .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
        usuario.setNombre(nombre);
        usuario.setEmail(email);
-       return usuarioRepository.save(usuario); 
+       return usuarioRepository.save(usuario);
+    }
+
+    public void desactivarUsuario(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuario.setActivo(false);
+        usuarioRepository.save(usuario);
     }
 }

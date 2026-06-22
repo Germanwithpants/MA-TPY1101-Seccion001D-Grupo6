@@ -11,8 +11,10 @@ import com.conectatarot.backend.entity.Sesion;
 import com.conectatarot.backend.repository.SesionRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -112,5 +114,20 @@ public class PagoController {
         Sesion sesion = sesionRepository.findById(sesionId)
                 .orElseThrow(() -> new RuntimeException("Sesion no encontrada"));
         return ResponseEntity.ok(Map.of("success", true, "estadoPago", sesion.getEstadoPago()));
+    }
+
+    @GetMapping("/mis-pagos")
+    public ResponseEntity<?> misPagos() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<Sesion> sesiones = sesionRepository
+                .findByUsuario_EmailAndTokenWebpayIsNotNullOrderByFechaDesc(email);
+        List<Map<String, Object>> resultado = sesiones.stream().map(s -> Map.<String, Object>of(
+                "sesionId",    s.getId(),
+                "monto",       s.getPrecioTotal(),
+                "fecha",       s.getFecha().toString(),
+                "estadoPago",  s.getEstadoPago(),
+                "tarotista",   s.getTarotista().getNombreProfesional()
+        )).toList();
+        return ResponseEntity.ok(resultado);
     }
 }

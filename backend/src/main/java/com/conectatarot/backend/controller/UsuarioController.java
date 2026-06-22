@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
@@ -51,18 +53,28 @@ public class UsuarioController {
         }
     }
     @PutMapping("/{id}")
-     public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody RegistroUsuarioRequest request) {
-       try {
-           Usuario usuario = usuarioService.actualizarUsuario(id, request.getNombre(), request.getEmail());
-           UsuarioResponse response = new UsuarioResponse();
-           response.setIdUsuario(usuario.getIdUsuario());
-           response.setNombre(usuario.getNombre());
-           response.setEmail(usuario.getEmail());
-           response.setRol(usuario.getRol().getNombreRol());
-           response.setActivo(usuario.getActivo());
-           return ResponseEntity.ok(response);
-       } catch (RuntimeException e) {
-       	   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-       }
-}    
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody RegistroUsuarioRequest request) {
+        try {
+            Usuario usuario = usuarioService.actualizarUsuario(id, request.getNombre(), request.getEmail());
+            UsuarioResponse response = new UsuarioResponse();
+            response.setIdUsuario(usuario.getIdUsuario());
+            response.setNombre(usuario.getNombre());
+            response.setEmail(usuario.getEmail());
+            response.setRol(usuario.getRol().getNombreRol());
+            response.setActivo(usuario.getActivo());
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
+        try {
+            usuarioService.desactivarUsuario(id);
+            return ResponseEntity.ok(Map.of("mensaje", "Usuario desactivado correctamente"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

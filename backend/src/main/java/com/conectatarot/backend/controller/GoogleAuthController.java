@@ -97,6 +97,11 @@ public class GoogleAuthController {
             return usuarioRepository.save(nuevo);
         });
 
+        if (!esNuevo[0] && !Boolean.TRUE.equals(usuario.getActivo())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("success", false, "message", "Cuenta desactivada"));
+        }
+
         String token = jwtService.generateToken(usuario.getEmail(), usuario.getRol().getNombreRol());
 
         return ResponseEntity.ok(Map.of(
