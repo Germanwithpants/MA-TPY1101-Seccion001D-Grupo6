@@ -67,7 +67,7 @@ public class AdminController {
         long totalUsuarios     = usuarioRepository.count();
         long totalSesiones     = sesionRepository.count();
         long tarotistaActivos  = tarotistaRepository.findByEstadoIgnoreCase("APROBADO").size();
-        BigDecimal ingresoTotal = sesionRepository.sumIngresoTotal();
+        BigDecimal ingresoTotal = sesionRepository.sumIngresoTotal().orElse(BigDecimal.ZERO);
 
         Map<String, Object> stats = Map.of(
                 "totalUsuarios",    totalUsuarios,

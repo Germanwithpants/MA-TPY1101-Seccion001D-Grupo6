@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.math.BigDecimal;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 
 public interface SesionRepository extends JpaRepository<Sesion, Integer> {
@@ -39,6 +40,6 @@ public interface SesionRepository extends JpaRepository<Sesion, Integer> {
     List<Sesion> findByEstadoPagoAndFechaBetweenOrderByFechaAsc(
             String estadoPago, LocalDateTime desde, LocalDateTime hasta);
 
-    @Query("SELECT COALESCE(SUM(s.precioTotal), 0) FROM Sesion s WHERE s.estadoPago = 'PAGADO'")
-    BigDecimal sumIngresoTotal();
+    @Query("SELECT SUM(s.precioTotal) FROM Sesion s WHERE s.estadoPago = 'PAGADO'")
+    Optional<BigDecimal> sumIngresoTotal();
 }
