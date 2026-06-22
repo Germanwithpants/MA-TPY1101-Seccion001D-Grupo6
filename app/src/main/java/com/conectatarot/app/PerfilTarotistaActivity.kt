@@ -16,7 +16,7 @@ class PerfilTarotistaActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
-        val idUsuario = 1
+        val idUsuario = prefs.getInt("idUsuario", 0)
 
         val etNombrePro = findViewById<EditText>(R.id.etEditNombrePro)
         val etDescripcion = findViewById<EditText>(R.id.etEditDescripcion)

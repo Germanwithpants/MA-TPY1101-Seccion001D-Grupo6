@@ -53,17 +53,45 @@
         android:layout_marginTop="60dp"
         android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/btnEditarPerfilTarotista"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="✏️ Editar mi perfil"
-        android:textColor="#ffffff"
-        android:backgroundTint="#2d1654"
-        android:textSize="14sp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp">
+
+        <Button
+            android:id="@+id/btnEditarPerfilTarotista"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="✏️ Mi Perfil"
+            android:textColor="#ffffff"
+            android:backgroundTint="#2d1654"
+            android:textSize="13sp"
+            android:layout_marginEnd="6dp"/>
+
+        <Button
+            android:id="@+id/btnDisponibilidad"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="🗓 Disponibilidad"
+            android:textColor="#ffffff"
+            android:backgroundTint="#4a1a8e"
+            android:textSize="13sp"
+            android:layout_marginStart="6dp"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressAgenda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="#7d3cae"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAgenda"

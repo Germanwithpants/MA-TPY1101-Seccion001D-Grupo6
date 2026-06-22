@@ -1,6 +1,8 @@
 package com.conectatarot.app
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -11,59 +13,74 @@ import kotlinx.coroutines.launch
 
 class TarotistaHomeActivity : AppCompatActivity() {
 
+    private lateinit var token: String
+    private lateinit var rvAgenda: RecyclerView
+    private lateinit var tvEmpty: TextView
+    private lateinit var progressAgenda: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tarotista_home)
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
-        val token = prefs.getString("token", "") ?: ""
+        token = prefs.getString("token", "") ?: ""
         val nombre = prefs.getString("nombre", "Tarotista") ?: "Tarotista"
 
         findViewById<TextView>(R.id.tvBienvenidoTarotista).text = "🔮 Bienvenida, $nombre"
-
-        val rvAgenda = findViewById<RecyclerView>(R.id.rvAgenda)
-        val tvEmpty = findViewById<TextView>(R.id.tvEmptyAgenda)
-        val tvCerrar = findViewById<TextView>(R.id.tvCerrarSesionTarotista)
-
+        rvAgenda = findViewById(R.id.rvAgenda)
+        tvEmpty = findViewById(R.id.tvEmptyAgenda)
+        progressAgenda = findViewById(R.id.progressAgenda)
         rvAgenda.layoutManager = LinearLayoutManager(this)
 
-        tvCerrar.setOnClickListener {
-            getSharedPreferences("conectatarot", MODE_PRIVATE).edit().clear().apply()
-            startActivity(android.content.Intent(this, MainActivity::class.java))
+        findViewById<TextView>(R.id.tvCerrarSesionTarotista).setOnClickListener {
+            prefs.edit().clear().apply()
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
-        cargarSesiones(token, rvAgenda, tvEmpty)
 
-        findViewById<android.widget.Button>(R.id.btnEditarPerfilTarotista).setOnClickListener {
-            startActivity(android.content.Intent(this, PerfilTarotistaActivity::class.java))
+        findViewById<Button>(R.id.btnEditarPerfilTarotista).setOnClickListener {
+            startActivity(Intent(this, PerfilTarotistaActivity::class.java))
         }
+
+        findViewById<Button>(R.id.btnDisponibilidad).setOnClickListener {
+            startActivity(Intent(this, DisponibilidadActivity::class.java))
+        }
+
+        cargarSesiones()
     }
 
-    private fun cargarSesiones(token: String, rv: RecyclerView, tvEmpty: TextView) {
+    private fun cargarSesiones() {
+        progressAgenda.visibility = View.VISIBLE
+        rvAgenda.visibility = View.GONE
+        tvEmpty.visibility = View.GONE
+
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.getSesionesTarotista("Bearer $token")
+                progressAgenda.visibility = View.GONE
                 if (response.isSuccessful && response.body() != null) {
                     val sesiones = response.body()!!.data?.content ?: emptyList()
                     if (sesiones.isEmpty()) {
-                        tvEmpty.visibility = android.view.View.VISIBLE
-                        rv.visibility = android.view.View.GONE
+                        tvEmpty.visibility = View.VISIBLE
                     } else {
-                        tvEmpty.visibility = android.view.View.GONE
-                        rv.visibility = android.view.View.VISIBLE
-                        rv.adapter = AgendaAdapter(sesiones,
-                            onConfirmar = { sesion -> cambiarEstado(token, sesion.id, "confirmar", rv, tvEmpty) },
-                            onRechazar = { sesion -> cambiarEstado(token, sesion.id, "rechazar", rv, tvEmpty) }
+                        rvAgenda.visibility = View.VISIBLE
+                        rvAgenda.adapter = AgendaAdapter(
+                            sesiones,
+                            onConfirmar = { sesion -> cambiarEstado(sesion.id, "confirmar") },
+                            onRechazar = { sesion -> cambiarEstado(sesion.id, "rechazar") }
                         )
                     }
+                } else {
+                    tvEmpty.visibility = View.VISIBLE
                 }
             } catch (e: Exception) {
+                progressAgenda.visibility = View.GONE
                 Toast.makeText(this@TarotistaHomeActivity, "Error al cargar agenda", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun cambiarEstado(token: String, id: Int, accion: String, rv: RecyclerView, tvEmpty: TextView) {
+    private fun cambiarEstado(id: Int, accion: String) {
         lifecycleScope.launch {
             try {
                 val response = if (accion == "confirmar")
@@ -74,7 +91,9 @@ class TarotistaHomeActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val msg = if (accion == "confirmar") "Sesión confirmada ✅" else "Sesión rechazada"
                     Toast.makeText(this@TarotistaHomeActivity, msg, Toast.LENGTH_SHORT).show()
-                    cargarSesiones(token, rv, tvEmpty)
+                    cargarSesiones()
+                } else {
+                    Toast.makeText(this@TarotistaHomeActivity, "Error al actualizar (${response.code()})", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@TarotistaHomeActivity, "Error de conexión", Toast.LENGTH_SHORT).show()

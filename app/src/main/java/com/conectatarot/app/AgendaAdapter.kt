@@ -1,5 +1,6 @@
 package com.conectatarot.app
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,13 +22,20 @@ class AgendaAdapter(
         val tvPrecio: TextView = view.findViewById(R.id.tvAgendaPrecio)
         val btnConfirmar: Button = view.findViewById(R.id.btnConfirmarAgenda)
         val btnRechazar: Button = view.findViewById(R.id.btnRechazarAgenda)
+        val btnVideollamada: Button = view.findViewById(R.id.btnVideollamadaAgenda)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_agenda, parent, false)
-        return ViewHolder(view)
+    private fun enVentanaLlamada(s: SesionItem): Boolean {
+        if (s.estado != "CONFIRMADA" || s.estadoPago != "PAGADO") return false
+        return try {
+            val fecha = java.time.LocalDateTime.parse(s.fecha)
+            val ahora = java.time.LocalDateTime.now()
+            ahora.isAfter(fecha.minusMinutes(15)) && ahora.isBefore(fecha.plusMinutes(s.duracionMinutos.toLong()))
+        } catch (e: Exception) { false }
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_agenda, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val s = sesiones[position]
@@ -36,11 +44,11 @@ class AgendaAdapter(
         holder.tvPrecio.text = "$ ${s.precioTotal.toInt()}"
 
         val (color, texto) = when (s.estado) {
-            "PENDIENTE" -> Pair("#f39c12", "⏳ Pendiente")
-            "CONFIRMADA" -> Pair("#27ae60", "✅ Confirmada")
-            "CANCELADA" -> Pair("#e74c3c", "❌ Cancelada")
-            "RECHAZADA" -> Pair("#95a5a6", "🚫 Rechazada")
-            else -> Pair("#9b59b6", s.estado)
+            "PENDIENTE"  -> "#f39c12" to "⏳ Pendiente confirmación"
+            "CONFIRMADA" -> "#27ae60" to "✅ Confirmada"
+            "CANCELADA"  -> "#e74c3c" to "❌ Cancelada"
+            "RECHAZADA"  -> "#95a5a6" to "🚫 Rechazada"
+            else         -> "#9b59b6" to s.estado
         }
         holder.tvEstado.text = texto
         holder.tvEstado.setTextColor(android.graphics.Color.parseColor(color))
@@ -53,6 +61,18 @@ class AgendaAdapter(
         } else {
             holder.btnConfirmar.visibility = View.GONE
             holder.btnRechazar.visibility = View.GONE
+        }
+
+        if (enVentanaLlamada(s)) {
+            holder.btnVideollamada.visibility = View.VISIBLE
+            holder.btnVideollamada.setOnClickListener {
+                val ctx = holder.itemView.context
+                ctx.startActivity(Intent(ctx, VideoCallActivity::class.java).apply {
+                    putExtra("sesionId", s.id)
+                })
+            }
+        } else {
+            holder.btnVideollamada.visibility = View.GONE
         }
     }
 

@@ -2,9 +2,10 @@ package com.conectatarot.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.conectatarot.app.network.RetrofitClient
+import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
 
@@ -12,11 +13,32 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        lifecycleScope.launch {
             val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
-            prefs.edit().clear().apply() // limpiar siempre, forzar login
-            startActivity(Intent(this, MainActivity::class.java))
+            val token = prefs.getString("token", null)
+            val rol = prefs.getString("rol", null)
+
+            if (!token.isNullOrBlank() && !rol.isNullOrBlank()) {
+                val valid = try {
+                    val resp = RetrofitClient.instance.getMisSesiones("Bearer $token")
+                    resp.code() != 401
+                } catch (e: Exception) {
+                    true
+                }
+
+                if (valid) {
+                    val dest = if (rol == "TAROTISTA") TarotistaHomeActivity::class.java
+                               else ClienteActivity::class.java
+                    startActivity(Intent(this@SplashActivity, dest))
+                    finish()
+                    return@launch
+                } else {
+                    prefs.edit().clear().apply()
+                }
+            }
+
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             finish()
-        }, 2000)
+        }
     }
 }

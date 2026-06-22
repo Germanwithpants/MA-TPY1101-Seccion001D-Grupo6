@@ -86,6 +86,17 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btnVideollamadaAgenda"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="📹 Unirme a la sesión"
+            android:textColor="#ffffff"
+            android:backgroundTint="#3498db"
+            android:textSize="13sp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

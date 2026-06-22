@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.conectatarot.app.network.FcmTokenRequest
+import com.conectatarot.app.network.GoogleLoginRequest
 import com.conectatarot.app.network.LoginRequest
+import com.conectatarot.app.network.LoginResponse
 import com.conectatarot.app.network.RetrofitClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -13,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +28,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (intent.getBooleanExtra("session_expired", false)) {
+            Toast.makeText(this, "Tu sesión expiró. Inicia sesión nuevamente.", Toast.LENGTH_LONG).show()
+        }
 
         auth = FirebaseAuth.getInstance()
 
@@ -41,18 +49,12 @@ class MainActivity : AppCompatActivity() {
         val tvIrRegistroTarotista = findViewById<TextView>(R.id.tvIrRegistroTarotista)
         val btnGoogleLogin = findViewById<Button>(R.id.btnGoogleLogin)
 
-        tvIrRegistro.setOnClickListener {
-            startActivity(Intent(this, RegistroActivity::class.java))
-        }
-
-        tvIrRegistroTarotista.setOnClickListener {
-            startActivity(Intent(this, RegistroTarotistaActivity::class.java))
-        }
+        tvIrRegistro.setOnClickListener { startActivity(Intent(this, RegistroActivity::class.java)) }
+        tvIrRegistroTarotista.setOnClickListener { startActivity(Intent(this, RegistroTarotistaActivity::class.java)) }
 
         btnGoogleLogin.setOnClickListener {
             googleSignInClient.signOut().addOnCompleteListener {
-                val signInIntent = googleSignInClient.signInIntent
-                startActivityForResult(signInIntent, RC_SIGN_IN)
+                startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
             }
         }
 
@@ -67,29 +69,17 @@ class MainActivity : AppCompatActivity() {
 
             btnLogin.isEnabled = false
             btnLogin.text = "Iniciando..."
+            tvError.text = ""
 
             lifecycleScope.launch {
                 try {
                     val response = RetrofitClient.instance.login(LoginRequest(email, password))
                     if (response.isSuccessful) {
-                        val body = response.body()!!
-                        val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
-                        prefs.edit()
-                            .putString("token", body.token)
-                            .putString("nombre", body.nombre)
-                            .putString("rol", body.rol)
-                            .putString("email", body.email)
-                            .putInt("idUsuario", body.idUsuario)
-                            .apply()
-                        val rol = body.rol
-                        if (rol == "TAROTISTA") {
-                            startActivity(Intent(this@MainActivity, TarotistaHomeActivity::class.java))
-                        } else {
-                            startActivity(Intent(this@MainActivity, ClienteActivity::class.java))
-                        }
-                        finish()
+                        onLoginSuccess(response.body()!!)
                     } else {
-                        tvError.text = "Credenciales incorrectas"
+                        val msg = if (response.code() == 403) "Cuenta desactivada"
+                                  else "Credenciales incorrectas"
+                        tvError.text = msg
                         btnLogin.isEnabled = true
                         btnLogin.text = "Iniciar sesión"
                     }
@@ -100,6 +90,36 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun onLoginSuccess(body: LoginResponse) {
+        val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
+        prefs.edit()
+            .putString("token", body.token)
+            .putString("nombre", body.nombre)
+            .putString("rol", body.rol)
+            .putString("email", body.email)
+            .putInt("idUsuario", body.idUsuario)
+            .apply()
+
+        // Register FCM token with backend (best-effort)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { fcmToken ->
+            lifecycleScope.launch {
+                try {
+                    RetrofitClient.instance.saveFcmToken(
+                        "Bearer ${body.token}", body.idUsuario, FcmTokenRequest(fcmToken)
+                    )
+                } catch (e: Exception) { /* non-critical */ }
+            }
+        }
+
+        val dest = when {
+            body.esNuevo -> SeleccionRolActivity::class.java
+            body.rol == "TAROTISTA" -> TarotistaHomeActivity::class.java
+            else -> ClienteActivity::class.java
+        }
+        startActivity(Intent(this, dest))
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -121,28 +141,9 @@ class MainActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 lifecycleScope.launch {
                     try {
-                        val response = RetrofitClient.instance.googleLogin(
-                            com.conectatarot.app.network.GoogleLoginRequest(idToken)
-                        )
+                        val response = RetrofitClient.instance.googleLogin(GoogleLoginRequest(idToken))
                         if (response.isSuccessful) {
-                            val body = response.body()!!
-                            val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
-                            prefs.edit()
-                                .putString("token", body.token)
-                                .putString("nombre", body.nombre)
-                                .putString("rol", body.rol)
-                                .putString("email", body.email)
-                                .putInt("idUsuario", body.idUsuario)
-                                .apply()
-
-                            if (body.esNuevo) {
-                                startActivity(Intent(this@MainActivity, SeleccionRolActivity::class.java))
-                            } else if (body.rol == "TAROTISTA") {
-                                startActivity(Intent(this@MainActivity, TarotistaHomeActivity::class.java))
-                            } else {
-                                startActivity(Intent(this@MainActivity, ClienteActivity::class.java))
-                            }
-                            finish()
+                            onLoginSuccess(response.body()!!)
                         } else {
                             Toast.makeText(this@MainActivity, "Error al sincronizar cuenta", Toast.LENGTH_SHORT).show()
                         }
@@ -151,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error de autenticación Firebase", Toast.LENGTH_SHORT).show()
             }
         }
     }

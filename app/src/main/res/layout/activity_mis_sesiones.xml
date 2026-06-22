@@ -24,6 +24,15 @@
         android:paddingLeft="16dp"
         android:paddingBottom="12dp"/>
 
+    <ProgressBar
+        android:id="@+id/progressMisSesiones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="#7d3cae"
+        android:layout_marginTop="40dp"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/tvEmptySesiones"
         android:layout_width="wrap_content"

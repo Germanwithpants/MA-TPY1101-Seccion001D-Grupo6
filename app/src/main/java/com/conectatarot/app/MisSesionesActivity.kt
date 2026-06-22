@@ -1,116 +1,139 @@
 package com.conectatarot.app
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.conectatarot.app.network.ResenaRequest
 import com.conectatarot.app.network.RetrofitClient
+import com.conectatarot.app.network.SesionItem
 import kotlinx.coroutines.launch
-import android.widget.LinearLayout
-import android.content.Intent
 
 class MisSesionesActivity : AppCompatActivity() {
+
+    private lateinit var token: String
+    private lateinit var rvSesiones: RecyclerView
+    private lateinit var tvEmpty: TextView
+    private lateinit var progress: ProgressBar
+
+    private val paymentLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            cargarSesiones()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_sesiones)
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
-        val token = prefs.getString("token", "") ?: ""
+        token = prefs.getString("token", "") ?: ""
 
-        val rvSesiones = findViewById<RecyclerView>(R.id.rvSesiones)
-        val tvVolver = findViewById<TextView>(R.id.tvVolverSesiones)
-        val tvEmpty = findViewById<TextView>(R.id.tvEmptySesiones)
+        rvSesiones = findViewById(R.id.rvSesiones)
+        tvEmpty = findViewById(R.id.tvEmptySesiones)
+        progress = findViewById(R.id.progressMisSesiones)
 
         rvSesiones.layoutManager = LinearLayoutManager(this)
+        findViewById<TextView>(R.id.tvVolverSesiones).setOnClickListener { finish() }
 
-        tvVolver.setOnClickListener { finish() }
+        cargarSesiones()
+    }
+
+    private fun cargarSesiones() {
+        progress.visibility = View.VISIBLE
+        rvSesiones.visibility = View.GONE
+        tvEmpty.visibility = View.GONE
 
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.getMisSesiones("Bearer $token")
+                progress.visibility = View.GONE
                 if (response.isSuccessful && response.body() != null) {
                     val sesiones = response.body()!!.data ?: emptyList()
                     if (sesiones.isEmpty()) {
-                        tvEmpty.visibility = android.view.View.VISIBLE
-                        rvSesiones.visibility = android.view.View.GONE
+                        tvEmpty.visibility = View.VISIBLE
                     } else {
-                        tvEmpty.visibility = android.view.View.GONE
-                        rvSesiones.visibility = android.view.View.VISIBLE
+                        rvSesiones.visibility = View.VISIBLE
                         rvSesiones.adapter = SesionAdapter(
                             sesiones,
-                            onCancelar = { sesion -> cancelarSesion(token, sesion.id) },
-                            onCalificar = { sesion -> mostrarDialogoCalificar(token, sesion) },
-                            onPagar = { sesion -> iniciarPago(sesion)}
+                            onCancelar = { sesion -> cancelarSesion(sesion.id) },
+                            onCalificar = { sesion -> mostrarDialogoCalificar(sesion) },
+                            onPagar = { sesion -> iniciarPago(sesion) }
                         )
                     }
+                } else {
+                    tvEmpty.visibility = View.VISIBLE
                 }
             } catch (e: Exception) {
+                progress.visibility = View.GONE
                 Toast.makeText(this@MisSesionesActivity, "Error al cargar sesiones", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun cancelarSesion(token: String, sesionId: Int) {
+    private fun cancelarSesion(sesionId: Int) {
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.cancelarSesion("Bearer $token", sesionId)
                 if (response.isSuccessful) {
                     Toast.makeText(this@MisSesionesActivity, "Sesión cancelada", Toast.LENGTH_SHORT).show()
-                    recreate()
+                    cargarSesiones()
                 } else {
-                    Toast.makeText(this@MisSesionesActivity, "No se pudo cancelar", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MisSesionesActivity, "No se pudo cancelar (${response.code()})", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@MisSesionesActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         }
     }
-    private fun mostrarDialogoCalificar(token: String, sesion: com.conectatarot.app.network.SesionItem) {
+
+    private fun mostrarDialogoCalificar(sesion: SesionItem) {
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val idUsuario = prefs.getInt("idUsuario", 0)
 
-        val ratingBar = android.widget.RatingBar(this)
-        ratingBar.numStars = 5
-        ratingBar.stepSize = 1f
-        ratingBar.rating = 5f
-
-        val etComentario = EditText(this)
-        etComentario.hint = "Comentario (opcional)"
-
-        val layout = LinearLayout(this)
-        layout.orientation = LinearLayout.VERTICAL
-        layout.setPadding(40, 20, 40, 20)
-        layout.addView(ratingBar)
-        layout.addView(etComentario)
+        val ratingBar = RatingBar(this).apply { numStars = 5; stepSize = 1f; rating = 5f }
+        val etComentario = EditText(this).apply { hint = "Comentario (opcional)" }
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(40, 20, 40, 20)
+            addView(ratingBar)
+            addView(etComentario)
+        }
 
         android.app.AlertDialog.Builder(this)
-            .setTitle("Califica a ${sesion.nombreTarotista}")
+            .setTitle("⭐ Califica a ${sesion.nombreTarotista}")
             .setView(layout)
             .setPositiveButton("Enviar") { _, _ ->
                 lifecycleScope.launch {
                     try {
-                        // Necesitamos el tarotistaId, lo obtenemos desde el endpoint de tarotistas
-                        val tarotistasResp = RetrofitClient.instance.getTarotistas("Bearer $token")
-                        val tarotista = tarotistasResp.body()?.data?.find { it.nombreProfesional == sesion.nombreTarotista }
-                        val tarotistaId = tarotista?.id ?: 1
+                        // Resolve tarotistaId from the session's tarotistaId field if available,
+                        // otherwise search by name
+                        val tarotistaId = if (sesion.tarotistaId != null && sesion.tarotistaId > 0) {
+                            sesion.tarotistaId
+                        } else {
+                            val resp = RetrofitClient.instance.getTarotistas("Bearer $token")
+                            resp.body()?.data?.find { it.nombreProfesional == sesion.nombreTarotista }?.id ?: 0
+                        }
 
                         val response = RetrofitClient.instance.crearResena(
-                            com.conectatarot.app.network.ResenaRequest(
+                            ResenaRequest(
                                 sesionId = sesion.id,
                                 tarotistaId = tarotistaId,
                                 usuarioId = idUsuario,
                                 calificacion = ratingBar.rating.toInt(),
-                                comentario = etComentario.text.toString()
+                                comentario = etComentario.text.toString().trim()
                             )
                         )
-                        if (response.isSuccessful) {
-                            Toast.makeText(this@MisSesionesActivity, "¡Gracias por tu calificación!", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(this@MisSesionesActivity, "Error al enviar calificación", Toast.LENGTH_SHORT).show()
-                        }
+                        val msg = if (response.isSuccessful) "¡Gracias por tu calificación!" else "Error al enviar"
+                        Toast.makeText(this@MisSesionesActivity, msg, Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {
                         Toast.makeText(this@MisSesionesActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
                     }
@@ -119,23 +142,27 @@ class MisSesionesActivity : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
-    private fun iniciarPago(sesion: com.conectatarot.app.network.SesionItem) {
+
+    private fun iniciarPago(sesion: SesionItem) {
         lifecycleScope.launch {
             try {
-                val response = RetrofitClient.instance.iniciarPago(sesion.id)
+                val response = RetrofitClient.instance.iniciarPago("Bearer $token", sesion.id)
                 if (response.isSuccessful && response.body()?.success == true) {
-                    val url = response.body()!!.url
-                    val token = response.body()!!.token
-                    val fullUrl = "$url?token_ws=$token"
-                    val intent = Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(fullUrl))
-                    startActivity(intent)
+                    val url = response.body()!!.url ?: ""
+                    val wsToken = response.body()!!.token ?: ""
+                    val fullUrl = if (wsToken.isNotBlank()) "$url?token_ws=$wsToken" else url
+                    paymentLauncher.launch(
+                        Intent(this@MisSesionesActivity, PaymentWebViewActivity::class.java).apply {
+                            putExtra("sesionId", sesion.id)
+                            putExtra("paymentUrl", fullUrl)
+                        }
+                    )
                 } else {
-                    Toast.makeText(this@MisSesionesActivity, "Error al iniciar pago", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MisSesionesActivity, "No se pudo iniciar el pago (${response.code()})", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@MisSesionesActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 }
