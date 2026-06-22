@@ -21,7 +21,7 @@
           </elementProp>
           <elementProp name="FECHA_SLOT" elementType="Argument">
             <stringProp name="Argument.name">FECHA_SLOT</stringProp>
-            <stringProp name="Argument.value">2027-07-06T10:00:00</stringProp>
+            <stringProp name="Argument.value">2028-06-03T14:00:00</stringProp>
           </elementProp>
         </collectionProp>
       </elementProp>
@@ -34,7 +34,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">50</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">30</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -75,7 +75,7 @@
         </hashTree>
         <SyncTimer guiclass="TestBeanGUI" testclass="SyncTimer" testname="Sincronizador 50 Hilos" enabled="true">
           <intProp name="groupSize">50</intProp>
-          <longProp name="timeoutInMs">10000</longProp>
+          <longProp name="timeoutInMs">60000</longProp>
         </SyncTimer>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Reservar Sesion" enabled="true">

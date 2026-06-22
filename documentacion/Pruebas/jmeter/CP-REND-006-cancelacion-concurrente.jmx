@@ -13,7 +13,7 @@
           </elementProp>
           <elementProp name="SESSION_ID" elementType="Argument">
             <stringProp name="Argument.name">SESSION_ID</stringProp>
-            <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.value">33</stringProp>
           </elementProp>
         </collectionProp>
       </elementProp>
@@ -26,7 +26,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">100</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">30</stringProp>
       </ThreadGroup>
       <hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login Cliente" enabled="true">
@@ -65,7 +65,7 @@
         </hashTree>
         <SyncTimer guiclass="TestBeanGUI" testclass="SyncTimer" testname="Sincronizador 100 Hilos" enabled="true">
           <intProp name="groupSize">100</intProp>
-          <longProp name="timeoutInMs">15000</longProp>
+          <longProp name="timeoutInMs">60000</longProp>
         </SyncTimer>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Cancelar Sesion" enabled="true">

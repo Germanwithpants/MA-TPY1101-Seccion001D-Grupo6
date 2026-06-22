@@ -1,91 +1,90 @@
-timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
-1782115740210,994,Login Tarotista,200,OK,10 Hilos CRUD 1-9,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,993,0,534
-1782115739616,1592,Login Tarotista,200,OK,10 Hilos CRUD 1-6,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1552,0,1142
-1782115740016,1182,Login Tarotista,200,OK,10 Hilos CRUD 1-8,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1182,0,734
-1782115739031,2163,Login Tarotista,200,OK,10 Hilos CRUD 1-1,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,2163,0,1713
-1782115739209,1988,Login Tarotista,200,OK,10 Hilos CRUD 1-4,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1988,0,1544
-1782115740409,846,Login Tarotista,200,OK,10 Hilos CRUD 1-10,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,750,0,367
-1782115739038,2161,Login Tarotista,200,OK,10 Hilos CRUD 1-2,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,2161,0,1701
-1782115739419,1789,Login Tarotista,200,OK,10 Hilos CRUD 1-5,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1789,0,1333
-1782115739029,2183,Login Tarotista,200,OK,10 Hilos CRUD 1-3,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,2182,0,1716
-1782115739819,1391,Login Tarotista,200,OK,10 Hilos CRUD 1-7,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1391,0,936
-1782115741424,359,GET Especialidades,200,OK,10 Hilos CRUD 1-9,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,359,0,0
-1782115741425,359,GET Especialidades,200,OK,10 Hilos CRUD 1-4,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,197,0,0
-1782115741421,365,GET Especialidades,200,OK,10 Hilos CRUD 1-3,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,365,0,0
-1782115741427,360,GET Especialidades,200,OK,10 Hilos CRUD 1-1,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,351,0,0
-1782115741421,367,GET Especialidades,200,OK,10 Hilos CRUD 1-2,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,366,0,0
-1782115741428,361,GET Especialidades,200,OK,10 Hilos CRUD 1-6,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,361,0,0
-1782115741424,368,GET Especialidades,200,OK,10 Hilos CRUD 1-10,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,368,0,0
-1782115741439,357,GET Especialidades,200,OK,10 Hilos CRUD 1-5,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
-1782115741420,377,GET Especialidades,200,OK,10 Hilos CRUD 1-8,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,377,0,0
-1782115741419,478,GET Especialidades,200,OK,10 Hilos CRUD 1-7,text,true,,517,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,477,0,0
-1782115741792,252,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-9,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,243,0,0
-1782115741901,208,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-7,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,203,0,0
-1782115741796,356,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-6,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
-1782115741788,371,POST Agregar Especialidad,200,OK,10 Hilos CRUD 1-1,text,true,,604,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,368,0,0
-1782115741793,364,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-10,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,364,0,0
-1782115741801,360,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-2,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,360,0,0
-1782115741798,362,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-8,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,362,0,0
-1782115741795,363,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-3,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,363,0,0
-1782115741804,361,POST Agregar Especialidad,200,OK,10 Hilos CRUD 1-5,text,true,,616,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,361,0,0
-1782115741790,394,POST Agregar Especialidad,200,OK,10 Hilos CRUD 1-4,text,true,,607,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,394,0,0
-1782115742049,384,Login Tarotista,200,OK,10 Hilos CRUD 1-9,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,384,0,0
-1782115742110,397,Login Tarotista,200,OK,10 Hilos CRUD 1-7,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,249,0,0
-1782115742161,395,Login Tarotista,200,OK,10 Hilos CRUD 1-10,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,395,0,0
-1782115742167,396,Login Tarotista,200,OK,10 Hilos CRUD 1-1,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,239,0,0
-1782115742187,392,Login Tarotista,200,OK,10 Hilos CRUD 1-2,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,236,0,0
-1782115742174,408,Login Tarotista,200,OK,10 Hilos CRUD 1-6,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,240,0,0
-1782115742174,413,Login Tarotista,200,OK,10 Hilos CRUD 1-5,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,412,0,0
-1782115742184,406,Login Tarotista,200,OK,10 Hilos CRUD 1-3,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,406,0,0
-1782115742185,409,Login Tarotista,200,OK,10 Hilos CRUD 1-4,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,406,0,0
-1782115742163,419,Login Tarotista,200,OK,10 Hilos CRUD 1-8,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,260,0,0
-1782115742583,208,GET Especialidades,200,OK,10 Hilos CRUD 1-6,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,205,0,0
-1782115742438,369,GET Especialidades,200,OK,10 Hilos CRUD 1-9,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,369,0,0
-1782115742608,202,GET Especialidades,200,OK,10 Hilos CRUD 1-4,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,201,0,0
-1782115742513,349,GET Especialidades,200,OK,10 Hilos CRUD 1-7,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,202,0,0
-1782115742561,365,GET Especialidades,200,OK,10 Hilos CRUD 1-10,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,212,0,0
-1782115742571,369,GET Especialidades,200,OK,10 Hilos CRUD 1-1,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,222,0,0
-1782115742588,354,GET Especialidades,200,OK,10 Hilos CRUD 1-2,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
-1782115742602,345,GET Especialidades,200,OK,10 Hilos CRUD 1-3,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,344,0,0
-1782115742604,349,GET Especialidades,200,OK,10 Hilos CRUD 1-5,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,348,0,0
-1782115742608,346,GET Especialidades,200,OK,10 Hilos CRUD 1-8,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,346,0,0
-1782115742955,197,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-8,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,197,0,0
-1782115742808,360,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-9,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,360,0,0
-1782115742824,363,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-4,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,360,0,0
-1782115742865,348,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-7,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,347,0,0
-1782115742929,350,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-10,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,350,0,0
-1782115742948,342,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-3,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,342,0,0
-1782115742943,347,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-2,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,347,0,0
-1782115742953,339,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-5,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,339,0,0
-1782115742941,356,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-1,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,355,0,0
-1782115742792,560,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-6,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,411,0,0
-1782115743280,241,Login Tarotista,200,OK,10 Hilos CRUD 1-10,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,240,0,0
-1782115743293,249,Login Tarotista,200,OK,10 Hilos CRUD 1-5,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,248,0,0
-1782115743155,397,Login Tarotista,200,OK,10 Hilos CRUD 1-8,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,397,0,0
-1782115743169,402,Login Tarotista,200,OK,10 Hilos CRUD 1-9,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,401,0,0
-1782115743188,396,Login Tarotista,200,OK,10 Hilos CRUD 1-4,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,242,0,0
-1782115743353,244,Login Tarotista,200,OK,10 Hilos CRUD 1-6,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,244,0,0
-1782115743216,400,Login Tarotista,200,OK,10 Hilos CRUD 1-7,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,241,0,0
-1782115743291,400,Login Tarotista,200,OK,10 Hilos CRUD 1-3,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,400,0,0
-1782115743291,402,Login Tarotista,200,OK,10 Hilos CRUD 1-2,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,401,0,0
-1782115743297,396,Login Tarotista,200,OK,10 Hilos CRUD 1-1,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,394,0,0
-1782115743522,336,GET Especialidades,200,OK,10 Hilos CRUD 1-10,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,336,0,0
-1782115743542,363,GET Especialidades,200,OK,10 Hilos CRUD 1-5,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,205,0,0
-1782115743553,354,GET Especialidades,200,OK,10 Hilos CRUD 1-8,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,354,0,0
-1782115743573,346,GET Especialidades,200,OK,10 Hilos CRUD 1-9,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,193,0,0
-1782115743585,348,GET Especialidades,200,OK,10 Hilos CRUD 1-4,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,348,0,0
-1782115743601,348,GET Especialidades,200,OK,10 Hilos CRUD 1-6,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,347,0,0
-1782115743618,346,GET Especialidades,200,OK,10 Hilos CRUD 1-7,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,346,0,0
-1782115743692,351,GET Especialidades,200,OK,10 Hilos CRUD 1-3,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,200,0,0
-1782115743694,350,GET Especialidades,200,OK,10 Hilos CRUD 1-1,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,349,0,0
-1782115743694,350,GET Especialidades,200,OK,10 Hilos CRUD 1-2,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,350,0,0
-1782115743859,353,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-10,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
-1782115744043,202,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-3,text,false,,530,481,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,201,0,0
-1782115743906,353,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-5,text,false,,530,481,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
-1782115743911,350,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-8,text,false,,530,481,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,348,0,0
-1782115743920,340,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-9,text,false,,530,481,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,340,0,0
-1782115743949,341,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-6,text,false,,530,481,5,5,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,341,0,0
-1782115743934,357,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-4,text,false,,530,481,5,5,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,196,0,0
-1782115743965,356,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-7,text,false,,530,481,3,3,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
-1782115744044,338,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-2,text,false,,530,481,2,2,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,338,0,0
-1782115744044,338,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-1,text,false,,530,481,2,2,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,338,0,0
+1782136773111,702,Login Tarotista,200,OK,10 Hilos CRUD 1-4,text,true,,856,281,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,693,0,359
+1782136772706,1222,Login Tarotista,200,OK,10 Hilos CRUD 1-1,text,true,,856,281,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1221,0,762
+1782136772909,1019,Login Tarotista,200,OK,10 Hilos CRUD 1-3,text,true,,856,281,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1018,0,509
+1782136772709,1236,Login Tarotista,200,OK,10 Hilos CRUD 1-2,text,true,,856,281,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1236,0,707
+1782136773306,760,Login Tarotista,200,OK,10 Hilos CRUD 1-5,text,true,,856,281,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,615,0,343
+1782136773929,201,GET Especialidades,200,OK,10 Hilos CRUD 1-1,text,true,,609,408,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,201,0,0
+1782136773863,360,GET Especialidades,200,OK,10 Hilos CRUD 1-4,text,true,,609,408,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,207,0,0
+1782136773932,350,GET Especialidades,200,OK,10 Hilos CRUD 1-3,text,true,,609,408,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,349,0,0
+1782136773506,776,Login Tarotista,200,OK,10 Hilos CRUD 1-6,text,true,,856,281,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,775,0,333
+1782136773946,349,GET Especialidades,200,OK,10 Hilos CRUD 1-2,text,true,,609,408,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,204,0,0
+1782136774068,352,GET Especialidades,200,OK,10 Hilos CRUD 1-5,text,true,,609,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,352,0,0
+1782136773712,770,Login Tarotista,200,OK,10 Hilos CRUD 1-7,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,619,0,232
+1782136774131,352,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-1,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,205,0,0
+1782136774296,200,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-2,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,200,0,0
+1782136774225,355,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-4,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,354,0,0
+1782136774282,356,POST Agregar Especialidad,200,OK,10 Hilos CRUD 1-3,text,true,,616,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136774283,355,GET Especialidades,200,OK,10 Hilos CRUD 1-6,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,355,0,0
+1782136773906,762,Login Tarotista,200,OK,10 Hilos CRUD 1-8,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,608,0,223
+1782136774485,267,Login Tarotista,200,OK,10 Hilos CRUD 1-1,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,267,0,0
+1782136774496,272,Login Tarotista,200,OK,10 Hilos CRUD 1-2,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,272,0,0
+1782136774421,402,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-5,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,402,0,0
+1782136774483,356,GET Especialidades,200,OK,10 Hilos CRUD 1-7,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136774107,777,Login Tarotista,200,OK,10 Hilos CRUD 1-9,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,777,0,328
+1782136774771,207,GET Especialidades,200,OK,10 Hilos CRUD 1-2,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,206,0,0
+1782136774580,401,Login Tarotista,200,OK,10 Hilos CRUD 1-4,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,401,0,0
+1782136774639,354,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-6,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,354,0,0
+1782136774671,356,GET Especialidades,200,OK,10 Hilos CRUD 1-8,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136774639,403,Login Tarotista,200,OK,10 Hilos CRUD 1-3,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,255,0,0
+1782136774308,764,Login Tarotista,200,OK,10 Hilos CRUD 1-10,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,607,0,321
+1782136774753,350,GET Especialidades,200,OK,10 Hilos CRUD 1-1,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,350,0,0
+1782136774841,357,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-7,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136774824,402,Login Tarotista,200,OK,10 Hilos CRUD 1-5,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,402,0,0
+1782136774885,356,GET Especialidades,200,OK,10 Hilos CRUD 1-9,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136775104,204,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-1,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,203,0,0
+1782136774982,353,GET Especialidades,200,OK,10 Hilos CRUD 1-4,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
+1782136774978,373,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-2,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,373,0,0
+1782136775028,351,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-8,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,351,0,0
+1782136775043,353,GET Especialidades,200,OK,10 Hilos CRUD 1-3,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
+1782136774994,417,Login Tarotista,200,OK,10 Hilos CRUD 1-6,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,416,0,0
+1782136775073,353,GET Especialidades,200,OK,10 Hilos CRUD 1-10,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
+1782136775309,253,Login Tarotista,200,OK,10 Hilos CRUD 1-1,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,253,0,0
+1782136775227,353,GET Especialidades,200,OK,10 Hilos CRUD 1-5,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
+1782136775242,354,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-9,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,354,0,0
+1782136775199,398,Login Tarotista,200,OK,10 Hilos CRUD 1-7,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,398,0,0
+1782136775397,212,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-3,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,210,0,0
+1782136775336,369,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-4,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,368,0,0
+1782136775352,402,Login Tarotista,200,OK,10 Hilos CRUD 1-2,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,401,0,0
+1782136775563,201,GET Especialidades,200,OK,10 Hilos CRUD 1-1,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,200,0,0
+1782136775412,357,GET Especialidades,200,OK,10 Hilos CRUD 1-6,text,true,,715,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136775426,358,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-10,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,357,0,0
+1782136775380,405,Login Tarotista,200,OK,10 Hilos CRUD 1-8,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,404,0,0
+1782136775598,344,GET Especialidades,200,OK,10 Hilos CRUD 1-7,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,344,0,0
+1782136775754,198,GET Especialidades,200,OK,10 Hilos CRUD 1-2,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,198,0,0
+1782136775581,377,POST Agregar Especialidad,200,OK,10 Hilos CRUD 1-5,text,true,,607,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,220,0,0
+1782136775596,395,Login Tarotista,200,OK,10 Hilos CRUD 1-9,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,395,0,0
+1782136775610,393,Login Tarotista,200,OK,10 Hilos CRUD 1-3,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,393,0,0
+1782136775769,341,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-6,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,341,0,0
+1782136775706,404,Login Tarotista,200,OK,10 Hilos CRUD 1-4,text,true,,856,281,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,404,0,0
+1782136775764,363,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-1,text,false,,530,481,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,207,0,0
+1782136775785,342,GET Especialidades,200,OK,10 Hilos CRUD 1-8,text,true,,811,408,10,10,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,342,0,0
+1782136775784,404,Login Tarotista,200,OK,10 Hilos CRUD 1-10,text,true,,856,281,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,404,0,0
+1782136776004,201,GET Especialidades,200,OK,10 Hilos CRUD 1-3,text,true,,811,408,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,200,0,0
+1782136775943,360,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-7,text,false,,530,481,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,360,0,0
+1782136775953,362,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-2,text,false,,530,481,9,9,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,362,0,0
+1782136775992,351,GET Especialidades,200,OK,10 Hilos CRUD 1-9,text,true,,811,408,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,351,0,0
+1782136775959,416,Login Tarotista,200,OK,10 Hilos CRUD 1-5,text,true,,856,281,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,416,0,0
+1782136776130,351,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-8,text,false,,530,481,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,351,0,0
+1782136776111,403,Login Tarotista,200,OK,10 Hilos CRUD 1-6,text,true,,856,281,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,248,0,0
+1782136776189,356,GET Especialidades,200,OK,10 Hilos CRUD 1-10,text,true,,811,408,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,203,0,0
+1782136776205,353,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-3,text,false,,530,481,8,8,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
+1782136776376,199,GET Especialidades,200,OK,10 Hilos CRUD 1-5,text,true,,811,408,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,199,0,0
+1782136776111,542,GET Especialidades,200,OK,10 Hilos CRUD 1-4,text,true,,811,408,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,542,0,0
+1782136776345,354,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-9,text,false,,530,481,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,205,0,0
+1782136776304,410,Login Tarotista,200,OK,10 Hilos CRUD 1-7,text,true,,856,281,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,257,0,0
+1782136776545,200,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-10,text,false,,530,481,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,200,0,0
+1782136776515,354,GET Especialidades,200,OK,10 Hilos CRUD 1-6,text,true,,811,408,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,202,0,0
+1782136776481,402,Login Tarotista,200,OK,10 Hilos CRUD 1-8,text,true,,856,281,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,402,0,0
+1782136776575,355,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-5,text,false,,530,481,7,7,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,355,0,0
+1782136776653,355,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-4,text,false,,530,481,6,6,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,354,0,0
+1782136776715,354,GET Especialidades,200,OK,10 Hilos CRUD 1-7,text,true,,811,408,5,5,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,354,0,0
+1782136776701,397,Login Tarotista,200,OK,10 Hilos CRUD 1-9,text,true,,856,281,5,5,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,397,0,0
+1782136776748,398,Login Tarotista,200,OK,10 Hilos CRUD 1-10,text,true,,856,281,5,5,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,398,0,0
+1782136776869,353,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-6,text,false,,530,481,5,5,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
+1782136776883,355,GET Especialidades,200,OK,10 Hilos CRUD 1-8,text,true,,811,408,4,4,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,355,0,0
+1782136777070,356,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-7,text,false,,530,481,4,4,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136777098,356,GET Especialidades,200,OK,10 Hilos CRUD 1-9,text,true,,811,408,3,3,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,356,0,0
+1782136777147,353,GET Especialidades,200,OK,10 Hilos CRUD 1-10,text,true,,811,408,3,3,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,204,0,0
+1782136777238,353,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-8,text,false,,530,481,3,3,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,353,0,0
+1782136777455,355,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-9,text,false,,530,481,2,2,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,355,0,0
+1782136777500,358,POST Agregar Especialidad,400,Bad Request,10 Hilos CRUD 1-10,text,false,,530,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,358,0,0

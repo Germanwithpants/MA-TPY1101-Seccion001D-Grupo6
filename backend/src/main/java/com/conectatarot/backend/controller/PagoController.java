@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -93,6 +95,10 @@ public class PagoController {
 
             if ("AUTHORIZED".equals(response.getStatus())) {
                 sesion.setEstadoPago("PAGADO");
+                BigDecimal comision = sesion.getPrecioTotal()
+                        .multiply(new BigDecimal("0.10"))
+                        .setScale(2, RoundingMode.HALF_UP);
+                sesion.setComisionAdmin(comision);
             } else {
                 sesion.setEstadoPago("RECHAZADO");
             }

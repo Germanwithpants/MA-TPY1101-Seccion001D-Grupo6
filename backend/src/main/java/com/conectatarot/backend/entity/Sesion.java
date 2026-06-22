@@ -52,6 +52,9 @@ public class Sesion {
     @Column(name = "token_webpay")
     private String tokenWebpay;
 
+    @Column(name = "comision_admin", precision = 10, scale = 2)
+    private BigDecimal comisionAdmin;
+
     @PrePersist
     public void prePersist() {
         this.fechaCreacion = LocalDateTime.now();

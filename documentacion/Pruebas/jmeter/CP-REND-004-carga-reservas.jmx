@@ -15,6 +15,16 @@
       </elementProp>
     </TestPlan>
     <hashTree>
+      <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Slots CSV" enabled="true">
+        <stringProp name="filename">/home/ricgaete/MA-TPY1101-Seccion001D-Grupo6/documentacion/Pruebas/jmeter/slots_carga.csv</stringProp>
+        <stringProp name="variableNames">fecha</stringProp>
+        <stringProp name="delimiter">,</stringProp>
+        <boolProp name="ignoreFirstLine">true</boolProp>
+        <stringProp name="shareMode">shareMode.all</stringProp>
+        <boolProp name="recycle">false</boolProp>
+        <boolProp name="stopThread">false</boolProp>
+      </CSVDataSet>
+      <hashTree/>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="500 Usuarios Carga" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
@@ -65,7 +75,7 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
-                <stringProp name="Argument.value">{"usuarioId":1,"tarotistaId":1,"especialidadId":1,"fecha":"2027-08-${__Random(4,8,)}T${__Random(9,17,)}:00:00","duracionMinutos":60}</stringProp>
+                <stringProp name="Argument.value">{"usuarioId":1,"tarotistaId":1,"especialidadId":1,"fecha":"${fecha}","duracionMinutos":60}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>

@@ -1,3 +1,20 @@
-timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
-1782115868015,1796,1. Login,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,856,281,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1781,0,1293
-1782115869971,364,2. POST Agregar Especialidad,400,Bad Request,1 Hilo CRUD Secuencial 1-1,text,false,,530,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,363,0,0
+1782136849454,1216,1. Login,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,856,281,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1103,0,777
+1782136850729,350,2. POST Agregar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,608,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,348,0,0
+1782136851080,360,3. GET Listar Especialidades,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,707,408,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,359,0,0
+1782136851442,369,4. DELETE Eliminar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,517,496,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades/2,369,0,0
+1782136851812,401,1. Login,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,856,281,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,401,0,0
+1782136852214,355,2. POST Agregar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,608,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,355,0,0
+1782136852570,360,3. GET Listar Especialidades,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,707,408,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,359,0,0
+1782136852930,364,4. DELETE Eliminar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,517,496,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades/2,364,0,0
+1782136853295,404,1. Login,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,856,281,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,403,0,0
+1782136853699,355,2. POST Agregar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,608,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,206,0,0
+1782136854055,200,3. GET Listar Especialidades,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,707,408,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,199,0,0
+1782136854255,200,4. DELETE Eliminar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,517,496,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades/2,200,0,0
+1782136854456,403,1. Login,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,856,281,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,403,0,0
+1782136854860,361,2. POST Agregar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,608,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,201,0,0
+1782136855221,370,3. GET Listar Especialidades,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,707,408,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,369,0,0
+1782136855591,356,4. DELETE Eliminar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,517,496,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades/2,203,0,0
+1782136855948,407,1. Login,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,856,281,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,406,0,0
+1782136856356,354,2. POST Agregar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,608,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,354,0,0
+1782136856713,356,3. GET Listar Especialidades,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,707,408,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,355,0,0
+1782136857070,204,4. DELETE Eliminar Especialidad,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,517,496,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades/2,204,0,0
