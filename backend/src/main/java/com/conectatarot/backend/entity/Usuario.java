@@ -33,6 +33,9 @@ public class Usuario {
     @Column(name = "activo")
     private Boolean activo;
 
+    @Column(name = "fcmToken", length = 512)
+    private String fcmToken;
+
     public Usuario() {
     }
 
@@ -90,5 +93,13 @@ public class Usuario {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

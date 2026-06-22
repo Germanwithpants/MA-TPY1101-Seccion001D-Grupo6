@@ -25,6 +25,7 @@ public class SesionService {
     private final TarotistaEspecialidadRepository tarotistaEspecialidadRepository;
     private final SesionRepository sesionRepository;
     private final DisponibilidadTarotistaRepository disponibilidadRepository;
+    private final FcmService fcmService;
 
     public Sesion agendarSesion(SesionRequestDTO request) {
 
@@ -135,8 +136,17 @@ public class SesionService {
         }
 
         sesion.setEstado("CANCELADA");
+        SesionResponseDTO result = convertirADTO(sesionRepository.save(sesion));
 
-        return convertirADTO(sesionRepository.save(sesion));
+        // Notify tarotista that session was cancelled
+        String fcmTarotista = sesion.getTarotista().getUsuario().getFcmToken();
+        String nombreCliente = sesion.getUsuario().getNombre();
+        fcmService.sendNotification(fcmTarotista,
+            "Sesión cancelada",
+            nombreCliente + " canceló la sesión del " + sesion.getFecha().toLocalDate(),
+            "CANCELADA");
+
+        return result;
     }
 
     public SesionResponseDTO confirmarSesion(Integer sesionId, String emailTarotista) {
@@ -151,8 +161,16 @@ public class SesionService {
         }
 
         sesion.setEstado("CONFIRMADA");
+        SesionResponseDTO resultConf = convertirADTO(sesionRepository.save(sesion));
 
-        return convertirADTO(sesionRepository.save(sesion));
+        // Notify client that session was confirmed
+        String fcmCliente = sesion.getUsuario().getFcmToken();
+        fcmService.sendNotification(fcmCliente,
+            "¡Sesión confirmada! ✅",
+            sesion.getTarotista().getNombreProfesional() + " confirmó tu sesión del " + sesion.getFecha().toLocalDate(),
+            "CONFIRMADA");
+
+        return resultConf;
     }
 
     public SesionResponseDTO rechazarSesion(Integer sesionId, String emailTarotista) {
@@ -167,8 +185,16 @@ public class SesionService {
         }
 
         sesion.setEstado("RECHAZADA");
+        SesionResponseDTO resultRech = convertirADTO(sesionRepository.save(sesion));
 
-        return convertirADTO(sesionRepository.save(sesion));
+        // Notify client that session was rejected
+        String fcmClienteRech = sesion.getUsuario().getFcmToken();
+        fcmService.sendNotification(fcmClienteRech,
+            "Sesión no disponible",
+            sesion.getTarotista().getNombreProfesional() + " no puede atenderte el " + sesion.getFecha().toLocalDate() + ". Puedes agendar otro horario.",
+            "RECHAZADA");
+
+        return resultRech;
     }
 
     private boolean estaDentroDeDisponibilidad(

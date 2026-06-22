@@ -77,4 +77,18 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @PutMapping("/{id}/fcm-token")
+    public ResponseEntity<?> saveFcmToken(@PathVariable Integer id, @RequestBody Map<String, String> body) {
+        try {
+            String fcmToken = body.get("fcmToken");
+            if (fcmToken == null || fcmToken.isBlank()) {
+                return ResponseEntity.badRequest().body("fcmToken requerido");
+            }
+            usuarioService.saveFcmToken(id, fcmToken);
+            return ResponseEntity.ok(Map.of("mensaje", "Token FCM guardado"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

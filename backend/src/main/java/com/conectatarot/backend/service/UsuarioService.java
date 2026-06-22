@@ -57,4 +57,11 @@ public class UsuarioService {
         usuario.setActivo(false);
         usuarioRepository.save(usuario);
     }
+
+    public void saveFcmToken(Integer id, String fcmToken) {
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuario.setFcmToken(fcmToken);
+        usuarioRepository.save(usuario);
+    }
 }
