@@ -276,7 +276,8 @@ data class IniciarPagoResponse(val success: Boolean, val url: String?, val token
 data class EstadoPagoResponse(val success: Boolean, val estadoPago: String?)
 
 // Admin data classes
-data class AdminUsuario(val idUsuario: Int, val nombre: String, val email: String, val rol: String?, val activo: Boolean?)
+data class AdminRol(val idRol: Int?, val nombreRol: String?)
+data class AdminUsuario(val idUsuario: Int, val nombre: String, val email: String, val rol: AdminRol?, val activo: Boolean?)
 data class AdminUsuariosResponse(val success: Boolean, val data: List<AdminUsuario>?)
 
 data class AdminTarotistaPendiente(val id: Int, val nombreProfesional: String, val descripcion: String?, val precioBase: Double?, val estado: String?)

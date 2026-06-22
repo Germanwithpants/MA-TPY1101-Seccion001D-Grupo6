@@ -30,7 +30,7 @@ class AdminUsuariosAdapter(
         val u = items[pos]
         h.tvNombre.text = u.nombre
         h.tvEmail.text = u.email
-        h.tvRol.text = "Rol: ${u.rol ?: "—"}"
+        h.tvRol.text = "Rol: ${u.rol?.nombreRol ?: "—"}"
 
         val activo = u.activo != false
         h.tvEstado.text = if (activo) "✅ Activo" else "🚫 Bloqueado"
