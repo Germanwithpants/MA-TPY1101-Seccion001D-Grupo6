@@ -1,0 +1,3 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1782115868015,1796,1. Login,200,OK,1 Hilo CRUD Secuencial 1-1,text,true,,856,281,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/auth/login,1781,0,1293
+1782115869971,364,2. POST Agregar Especialidad,400,Bad Request,1 Hilo CRUD Secuencial 1-1,text,false,,530,481,1,1,https://ingenious-smile-production-f4df.up.railway.app/api/tarotistas/2/especialidades,363,0,0
