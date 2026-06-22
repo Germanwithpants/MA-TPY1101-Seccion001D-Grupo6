@@ -3,6 +3,7 @@ package com.conectatarot.backend.service;
 import com.conectatarot.backend.dto.LoginRequestDTO;
 import com.conectatarot.backend.dto.LoginResponseDTO;
 import com.conectatarot.backend.entity.Usuario;
+import com.conectatarot.backend.exception.ForbiddenException;
 import com.conectatarot.backend.repository.UsuarioRepository;
 import com.conectatarot.backend.security.JwtService;
 
@@ -44,7 +45,7 @@ public class AuthService {
         }
 
         if (!Boolean.TRUE.equals(usuario.getActivo())) {
-            throw new RuntimeException("Cuenta desactivada");
+            throw new ForbiddenException("Cuenta desactivada");
         }
 
         String token = jwtService.generateToken(
