@@ -46,9 +46,8 @@ class PaymentWebViewActivity : AppCompatActivity() {
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     progress.visibility = View.GONE
-                    // Backend has already processed /api/pagos/confirmar — now safe to check status
-                    if (url != null && (url.contains("/api/pagos/confirmar") ||
-                            url.contains("token_ws") || url.contains("TBK_TOKEN"))) {
+                    // Only trigger after our backend processes the return URL, not on the initial Transbank page
+                    if (url != null && url.contains("/api/pagos/confirmar")) {
                         checkPaymentAndClose(token, sesionId)
                     }
                 }
