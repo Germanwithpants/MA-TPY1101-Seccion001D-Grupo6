@@ -77,9 +77,20 @@ class MisSesionesActivity : AppCompatActivity() {
         }
     }
 
+    private fun esPasada(s: SesionItem): Boolean {
+        return try {
+            val fin = java.time.LocalDateTime.parse(s.fecha).plusMinutes(s.duracionMinutos.toLong())
+            fin.isBefore(java.time.LocalDateTime.now())
+        } catch (e: Exception) { false }
+    }
+
     private fun buildSectionedList(sesiones: List<SesionItem>): List<SesionListItem> {
-        val activas = sesiones.filter { it.estado == "PENDIENTE" || it.estado == "CONFIRMADA" }
-        val historial = sesiones.filter { it.estado !in listOf("PENDIENTE", "CONFIRMADA") }
+        val activas = sesiones.filter {
+            (it.estado == "PENDIENTE" || it.estado == "CONFIRMADA") && !esPasada(it)
+        }
+        val historial = sesiones.filter {
+            it.estado !in listOf("PENDIENTE", "CONFIRMADA") || esPasada(it)
+        }
 
         val result = mutableListOf<SesionListItem>()
         if (activas.isNotEmpty()) {

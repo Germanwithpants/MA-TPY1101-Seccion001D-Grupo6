@@ -60,7 +60,8 @@ class SesionAdapter(
     }
 
     private fun sesionCompletada(s: SesionItem): Boolean {
-        if (s.estado != "CONFIRMADA") return false
+        if (s.estado == "COMPLETADA") return true
+        if (s.estado !in listOf("CONFIRMADA", "PENDIENTE")) return false
         return try {
             val fin = java.time.LocalDateTime.parse(s.fecha).plusMinutes(s.duracionMinutos.toLong())
             fin.isBefore(java.time.LocalDateTime.now())
@@ -90,9 +91,11 @@ class SesionAdapter(
 
         val (color, texto) = when {
             sesionCompletada(s)                                  -> "#3498db" to "✔ Completada"
-            s.estado == "PENDIENTE" && s.estadoPago == "PAGADO" -> "#27ae60" to "✅ Pagada – pendiente confirmación"
+            s.estado == "PENDIENTE" && s.estadoPago == "PAGADO" -> "#27ae60" to "✅ Pagada – confirmada"
             s.estado == "PENDIENTE"                              -> "#f39c12" to "⏳ Pendiente de pago"
+            s.estado == "CONFIRMADA" && s.estadoPago == "PAGADO"-> "#27ae60" to "✅ Confirmada y pagada"
             s.estado == "CONFIRMADA"                             -> "#27ae60" to "✅ Confirmada"
+            s.estado == "COMPLETADA"                             -> "#3498db" to "✔ Completada"
             s.estado == "CANCELADA"                              -> "#e74c3c" to "❌ Cancelada"
             s.estado == "RECHAZADA"                              -> "#95a5a6" to "🚫 Rechazada"
             else                                                 -> "#9b59b6" to s.estado
