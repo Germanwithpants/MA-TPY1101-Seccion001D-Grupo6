@@ -9,14 +9,28 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.conectatarot.app.network.SesionItem
 
+sealed class SesionListItem {
+    data class Header(val title: String) : SesionListItem()
+    data class Item(val sesion: SesionItem) : SesionListItem()
+}
+
 class SesionAdapter(
-    private val sesiones: List<SesionItem>,
+    private val items: List<SesionListItem>,
     private val onCancelar: (SesionItem) -> Unit,
     private val onCalificar: (SesionItem) -> Unit,
     private val onPagar: (SesionItem) -> Unit
-) : RecyclerView.Adapter<SesionAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    companion object {
+        private const val TYPE_HEADER = 0
+        private const val TYPE_ITEM = 1
+    }
+
+    class HeaderVH(view: View) : RecyclerView.ViewHolder(view) {
+        val tv: TextView = view as TextView
+    }
+
+    class ItemVH(view: View) : RecyclerView.ViewHolder(view) {
         val tvTarotista: TextView = view.findViewById(R.id.tvSesionTarotista)
         val tvFecha: TextView = view.findViewById(R.id.tvSesionFecha)
         val tvEstado: TextView = view.findViewById(R.id.tvSesionEstado)
@@ -25,6 +39,24 @@ class SesionAdapter(
         val btnPagar: Button = view.findViewById(R.id.btnPagarSesion)
         val btnVideollamada: Button = view.findViewById(R.id.btnVideollamada)
         val tvVideollamadaInfo: TextView = view.findViewById(R.id.tvVideollamadaInfo)
+    }
+
+    override fun getItemViewType(position: Int) =
+        if (items[position] is SesionListItem.Header) TYPE_HEADER else TYPE_ITEM
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        if (viewType == TYPE_HEADER)
+            HeaderVH(LayoutInflater.from(parent.context).inflate(R.layout.item_sesion_header, parent, false))
+        else
+            ItemVH(LayoutInflater.from(parent.context).inflate(R.layout.item_sesion, parent, false))
+
+    override fun getItemCount() = items.size
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = items[position]) {
+            is SesionListItem.Header -> (holder as HeaderVH).tv.text = item.title
+            is SesionListItem.Item   -> bindItem(holder as ItemVH, item.sesion)
+        }
     }
 
     private fun sesionCompletada(s: SesionItem): Boolean {
@@ -51,28 +83,23 @@ class SesionAdapter(
         } catch (e: Exception) { false }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_sesion, parent, false))
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val s = sesiones[position]
+    private fun bindItem(holder: ItemVH, s: SesionItem) {
         holder.tvTarotista.text = "🌙 ${s.nombreTarotista}"
         holder.tvFecha.text = "📅 ${s.fecha.take(16).replace("T", " ")}"
         holder.tvPrecio.text = "$ ${s.precioTotal.toInt()}"
 
         val (color, texto) = when {
-            sesionCompletada(s)                              -> "#3498db" to "✔ Completada"
+            sesionCompletada(s)                                  -> "#3498db" to "✔ Completada"
             s.estado == "PENDIENTE" && s.estadoPago == "PAGADO" -> "#27ae60" to "✅ Pagada – pendiente confirmación"
-            s.estado == "PENDIENTE"                          -> "#f39c12" to "⏳ Pendiente de pago"
-            s.estado == "CONFIRMADA"                         -> "#27ae60" to "✅ Confirmada"
-            s.estado == "CANCELADA"                          -> "#e74c3c" to "❌ Cancelada"
-            s.estado == "RECHAZADA"                          -> "#95a5a6" to "🚫 Rechazada"
-            else                                             -> "#9b59b6" to s.estado
+            s.estado == "PENDIENTE"                              -> "#f39c12" to "⏳ Pendiente de pago"
+            s.estado == "CONFIRMADA"                             -> "#27ae60" to "✅ Confirmada"
+            s.estado == "CANCELADA"                              -> "#e74c3c" to "❌ Cancelada"
+            s.estado == "RECHAZADA"                              -> "#95a5a6" to "🚫 Rechazada"
+            else                                                 -> "#9b59b6" to s.estado
         }
         holder.tvEstado.text = texto
         holder.tvEstado.setTextColor(android.graphics.Color.parseColor(color))
 
-        // Action buttons
         holder.btnCancelar.isEnabled = true
         when {
             s.estado == "PENDIENTE" && s.estadoPago != "PAGADO" -> {
@@ -103,7 +130,6 @@ class SesionAdapter(
             }
         }
 
-        // Video call button — opens VideoCallActivity (in-app WebView)
         when {
             ventanaVideollamada(s) -> {
                 holder.btnVideollamada.visibility = View.VISIBLE
@@ -125,6 +151,4 @@ class SesionAdapter(
             }
         }
     }
-
-    override fun getItemCount() = sesiones.size
 }

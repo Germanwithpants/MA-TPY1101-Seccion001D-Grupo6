@@ -54,6 +54,10 @@ class ClienteActivity : AppCompatActivity() {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     false
                 }
+                R.id.nav_ajustes -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    false
+                }
                 else -> true
             }
         }

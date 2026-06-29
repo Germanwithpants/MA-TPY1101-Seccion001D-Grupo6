@@ -25,9 +25,7 @@ class MisSesionesActivity : AppCompatActivity() {
     private val paymentLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            cargarSesiones()
-        }
+        if (result.resultCode == Activity.RESULT_OK) cargarSesiones()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +61,7 @@ class MisSesionesActivity : AppCompatActivity() {
                     } else {
                         rvSesiones.visibility = View.VISIBLE
                         rvSesiones.adapter = SesionAdapter(
-                            sesiones,
+                            buildSectionedList(sesiones),
                             onCancelar = { sesion -> cancelarSesion(sesion.id) },
                             onCalificar = { sesion -> mostrarDialogoCalificar(sesion) },
                             onPagar = { sesion -> iniciarPago(sesion) }
@@ -77,6 +75,22 @@ class MisSesionesActivity : AppCompatActivity() {
                 Toast.makeText(this@MisSesionesActivity, "Error al cargar sesiones", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun buildSectionedList(sesiones: List<SesionItem>): List<SesionListItem> {
+        val activas = sesiones.filter { it.estado == "PENDIENTE" || it.estado == "CONFIRMADA" }
+        val historial = sesiones.filter { it.estado !in listOf("PENDIENTE", "CONFIRMADA") }
+
+        val result = mutableListOf<SesionListItem>()
+        if (activas.isNotEmpty()) {
+            result.add(SesionListItem.Header("PRÓXIMAS"))
+            activas.forEach { result.add(SesionListItem.Item(it)) }
+        }
+        if (historial.isNotEmpty()) {
+            result.add(SesionListItem.Header("HISTORIAL"))
+            historial.forEach { result.add(SesionListItem.Item(it)) }
+        }
+        return result
     }
 
     private fun cancelarSesion(sesionId: Int) {
@@ -114,15 +128,12 @@ class MisSesionesActivity : AppCompatActivity() {
             .setPositiveButton("Enviar") { _, _ ->
                 lifecycleScope.launch {
                     try {
-                        // Resolve tarotistaId from the session's tarotistaId field if available,
-                        // otherwise search by name
                         val tarotistaId = if (sesion.tarotistaId != null && sesion.tarotistaId > 0) {
                             sesion.tarotistaId
                         } else {
                             val resp = RetrofitClient.instance.getTarotistas("Bearer $token")
                             resp.body()?.data?.find { it.nombreProfesional == sesion.nombreTarotista }?.id ?: 0
                         }
-
                         val response = RetrofitClient.instance.crearResena(
                             ResenaRequest(
                                 sesionId = sesion.id,

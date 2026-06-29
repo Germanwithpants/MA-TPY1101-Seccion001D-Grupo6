@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1a0a2e">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/tvVolverSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="←"
+            android:textColor="#9b59b6"
+            android:textSize="22sp"
+            android:paddingEnd="12dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚙ Ajustes"
+            android:textColor="#d4aaff"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- ── Tu Cuenta ── -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TU CUENTA"
+                android:textColor="#7d3cae"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:paddingLeft="16dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="6dp"/>
+
+            <LinearLayout android:id="@+id/rowEditarPerfil"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="👤  Editar perfil"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="#7d3cae" android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/rowCambiarPassword"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="🔑  Cambiar contraseña"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Próximamente" android:textColor="#7d3cae" android:textSize="12sp"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/rowDispositivos"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="📱  Dispositivos vinculados"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Próximamente" android:textColor="#7d3cae" android:textSize="12sp"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/rowSuscripcion"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="⭐  Suscripción"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Próximamente" android:textColor="#7d3cae" android:textSize="12sp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginLeft="16dp" android:background="#2d1654"/>
+
+            <!-- ── Privacidad y Seguridad ── -->
+            <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="PRIVACIDAD Y SEGURIDAD"
+                android:textColor="#7d3cae" android:textSize="11sp" android:textStyle="bold"
+                android:letterSpacing="0.1" android:paddingLeft="16dp"
+                android:paddingTop="20dp" android:paddingBottom="6dp"/>
+
+            <LinearLayout android:id="@+id/rowDosFactor"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="🔒  Autenticación en dos pasos"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Próximamente" android:textColor="#7d3cae" android:textSize="12sp"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/rowLimpiarCache"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="🗑  Limpiar caché"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="#7d3cae" android:textSize="20sp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginLeft="16dp" android:background="#2d1654"/>
+
+            <!-- ── Notificaciones ── -->
+            <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="NOTIFICACIONES"
+                android:textColor="#7d3cae" android:textSize="11sp" android:textStyle="bold"
+                android:letterSpacing="0.1" android:paddingLeft="16dp"
+                android:paddingTop="20dp" android:paddingBottom="6dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="🔔  Notificaciones push"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <Switch android:id="@+id/switchNotificaciones"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:thumbTint="#9b59b6" android:trackTint="#2d1654"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Recibe alertas de confirmación de sesiones, pagos y videollamadas."
+                android:textColor="#7d3cae" android:textSize="12sp"
+                android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingBottom="8dp"/>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginLeft="16dp" android:background="#2d1654"/>
+
+            <!-- ── Pantalla y Temas ── -->
+            <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="PANTALLA Y TEMAS"
+                android:textColor="#7d3cae" android:textSize="11sp" android:textStyle="bold"
+                android:letterSpacing="0.1" android:paddingLeft="16dp"
+                android:paddingTop="20dp" android:paddingBottom="6dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="🌙  Modo oscuro"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <Switch android:id="@+id/switchModoOscuro"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:thumbTint="#9b59b6" android:trackTint="#2d1654"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="Color de acento"
+                android:textColor="#e8c3ff" android:textSize="14sp"
+                android:paddingLeft="16dp" android:paddingTop="8dp" android:paddingBottom="12dp"/>
+
+            <!-- Color swatches -->
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:paddingLeft="16dp"
+                android:paddingRight="16dp" android:paddingBottom="16dp">
+
+                <View android:id="@+id/colorPurple"
+                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_marginEnd="12dp" android:background="@drawable/color_swatch"
+                    android:backgroundTint="#9b59b6"/>
+                <View android:id="@+id/colorBlue"
+                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_marginEnd="12dp" android:background="@drawable/color_swatch"
+                    android:backgroundTint="#3498db"/>
+                <View android:id="@+id/colorGreen"
+                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_marginEnd="12dp" android:background="@drawable/color_swatch"
+                    android:backgroundTint="#27ae60"/>
+                <View android:id="@+id/colorRed"
+                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_marginEnd="12dp" android:background="@drawable/color_swatch"
+                    android:backgroundTint="#e74c3c"/>
+                <View android:id="@+id/colorOrange"
+                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_marginEnd="12dp" android:background="@drawable/color_swatch"
+                    android:backgroundTint="#e67e22"/>
+                <View android:id="@+id/colorPink"
+                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:background="@drawable/color_swatch"
+                    android:backgroundTint="#e91e8c"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginLeft="16dp" android:background="#2d1654"/>
+
+            <!-- ── Datos y Almacenamiento ── -->
+            <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="DATOS Y ALMACENAMIENTO"
+                android:textColor="#7d3cae" android:textSize="11sp" android:textStyle="bold"
+                android:letterSpacing="0.1" android:paddingLeft="16dp"
+                android:paddingTop="20dp" android:paddingBottom="6dp"/>
+
+            <LinearLayout android:id="@+id/rowPermissions"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="🎙  Permisos de la app"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="#7d3cae" android:textSize="20sp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginLeft="16dp" android:background="#2d1654"/>
+
+            <!-- ── Ayuda y Soporte ── -->
+            <TextView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="AYUDA Y SOPORTE"
+                android:textColor="#7d3cae" android:textSize="11sp" android:textStyle="bold"
+                android:letterSpacing="0.1" android:paddingLeft="16dp"
+                android:paddingTop="20dp" android:paddingBottom="6dp"/>
+
+            <LinearLayout android:id="@+id/rowFaq"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="❓  Preguntas frecuentes"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="#7d3cae" android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/rowSoporte"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="💬  Contactar soporte"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="#7d3cae" android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="ℹ  Versión de la app"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:id="@+id/tvVersion"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="1.0.0" android:textColor="#7d3cae" android:textSize="13sp"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginLeft="16dp" android:background="#2d1654"/>
+
+            <!-- ── Cerrar sesión ── -->
+            <Button
+                android:id="@+id/btnLogoutSettings"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="24dp"
+                android:text="Cerrar sesión"
+                android:textColor="#ffffff"
+                android:backgroundTint="#e74c3c"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
