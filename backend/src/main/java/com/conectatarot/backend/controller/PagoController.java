@@ -95,6 +95,7 @@ public class PagoController {
 
             if ("AUTHORIZED".equals(response.getStatus())) {
                 sesion.setEstadoPago("PAGADO");
+                sesion.setEstado("CONFIRMADA");
                 BigDecimal comision = sesion.getPrecioTotal()
                         .multiply(new BigDecimal("0.10"))
                         .setScale(2, RoundingMode.HALF_UP);
