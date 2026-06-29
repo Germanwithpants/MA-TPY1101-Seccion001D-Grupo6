@@ -101,7 +101,7 @@
             android:id="@+id/btnCompGuardar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Comenzar"
+            android:text="Siguiente: configurar horarios →"
             android:textColor="#ffffff"
             android:backgroundTint="#7d3cae"
             android:textSize="16sp"

@@ -57,7 +57,9 @@ class CompletarPerfilTarotistaActivity : AppCompatActivity() {
                             .putString("descripcion", descripcion)
                             .putString("precioBase", precioStr)
                             .apply()
-                        startActivity(Intent(this@CompletarPerfilTarotistaActivity, TarotistaHomeActivity::class.java))
+                        startActivity(Intent(this@CompletarPerfilTarotistaActivity, DisponibilidadActivity::class.java).apply {
+                            putExtra("isOnboarding", true)
+                        })
                         finish()
                     } else {
                         tvResultado.text = "Error al guardar perfil"

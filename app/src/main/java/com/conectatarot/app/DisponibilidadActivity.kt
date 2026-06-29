@@ -1,5 +1,6 @@
 package com.conectatarot.app
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,9 +20,15 @@ class DisponibilidadActivity : AppCompatActivity() {
     private val DIAS = arrayOf("LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO", "DOMINGO")
     private val DIAS_DISPLAY = arrayOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
 
+    private var isOnboarding = false
+    private var slotCount = 0
+    private lateinit var btnContinuar: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_disponibilidad)
+
+        isOnboarding = intent.getBooleanExtra("isOnboarding", false)
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
@@ -34,6 +41,24 @@ class DisponibilidadActivity : AppCompatActivity() {
         val rvDisponibilidad = findViewById<RecyclerView>(R.id.rvDisponibilidad)
         val tvEmpty = findViewById<TextView>(R.id.tvEmptyDisponibilidad)
         val progressDisp = findViewById<ProgressBar>(R.id.progressDisponibilidad)
+        val tvVolver = findViewById<TextView>(R.id.tvVolverDisponibilidad)
+        val bannerOnboarding = findViewById<View>(R.id.bannerOnboarding)
+        btnContinuar = findViewById(R.id.btnContinuarOnboarding)
+
+        if (isOnboarding) {
+            tvVolver.visibility = View.INVISIBLE  // keep space but not clickable
+            bannerOnboarding.visibility = View.VISIBLE
+            btnContinuar.visibility = View.VISIBLE
+            btnContinuar.isEnabled = false
+            btnContinuar.alpha = 0.4f
+            btnContinuar.setOnClickListener {
+                startActivity(Intent(this, TarotistaHomeActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
+            }
+        } else {
+            tvVolver.setOnClickListener { finish() }
+        }
 
         spinnerDia.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, DIAS_DISPLAY)
 
@@ -50,6 +75,7 @@ class DisponibilidadActivity : AppCompatActivity() {
                 try {
                     val resp = RetrofitClient.instance.getDisponibilidad("Bearer $token", tarotistaId)
                     val lista = resp.body()?.data ?: emptyList()
+                    slotCount = lista.size
                     progressDisp.visibility = View.GONE
                     if (lista.isEmpty()) {
                         tvEmpty.visibility = View.VISIBLE
@@ -68,6 +94,7 @@ class DisponibilidadActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    updateContinuarButton()
                 } catch (e: Exception) {
                     progressDisp.visibility = View.GONE
                     Toast.makeText(this@DisponibilidadActivity, "Error al cargar disponibilidad", Toast.LENGTH_SHORT).show()
@@ -106,8 +133,25 @@ class DisponibilidadActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
-        findViewById<TextView>(R.id.tvVolverDisponibilidad).setOnClickListener { finish() }
+    private fun updateContinuarButton() {
+        if (!isOnboarding) return
+        val hasSlots = slotCount > 0
+        btnContinuar.isEnabled = hasSlots
+        btnContinuar.alpha = if (hasSlots) 1f else 0.4f
+        btnContinuar.text = if (hasSlots)
+            "Comenzar a recibir clientes ($slotCount horario${if (slotCount != 1) "s" else ""} agregado${if (slotCount != 1) "s" else ""})"
+        else
+            "Agrega al menos un horario para continuar"
+    }
+
+    override fun onBackPressed() {
+        if (isOnboarding) {
+            Toast.makeText(this, "Debes agregar al menos un horario para continuar", Toast.LENGTH_LONG).show()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private fun showTimePicker(field: EditText) {
