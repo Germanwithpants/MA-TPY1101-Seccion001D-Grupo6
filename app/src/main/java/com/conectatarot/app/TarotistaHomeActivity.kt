@@ -72,10 +72,12 @@ class TarotistaHomeActivity : AppCompatActivity() {
                     }
                 } else {
                     tvEmpty.visibility = View.VISIBLE
+                    Toast.makeText(this@TarotistaHomeActivity, "Error ${response.code()} al cargar sesiones", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 progressAgenda.visibility = View.GONE
-                Toast.makeText(this@TarotistaHomeActivity, "Error al cargar agenda", Toast.LENGTH_SHORT).show()
+                tvEmpty.visibility = View.VISIBLE
+                Toast.makeText(this@TarotistaHomeActivity, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }

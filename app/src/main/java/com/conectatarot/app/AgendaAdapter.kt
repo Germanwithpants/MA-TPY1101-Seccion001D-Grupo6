@@ -20,6 +20,7 @@ class AgendaAdapter(
         val tvFecha: TextView = view.findViewById(R.id.tvAgendaFecha)
         val tvEstado: TextView = view.findViewById(R.id.tvAgendaEstado)
         val tvPrecio: TextView = view.findViewById(R.id.tvAgendaPrecio)
+        val tvPago: TextView = view.findViewById(R.id.tvAgendaPago)
         val btnConfirmar: Button = view.findViewById(R.id.btnConfirmarAgenda)
         val btnRechazar: Button = view.findViewById(R.id.btnRechazarAgenda)
         val btnVideollamada: Button = view.findViewById(R.id.btnVideollamadaAgenda)
@@ -52,6 +53,14 @@ class AgendaAdapter(
         }
         holder.tvEstado.text = texto
         holder.tvEstado.setTextColor(android.graphics.Color.parseColor(color))
+
+        val (pagoColor, pagoTexto) = when (s.estadoPago) {
+            "PAGADO"   -> "#27ae60" to "💰 Pagado"
+            "RECHAZADO" -> "#e74c3c" to "❌ Pago rechazado"
+            else        -> "#f39c12" to "⏳ Pago pendiente"
+        }
+        holder.tvPago.text = pagoTexto
+        holder.tvPago.setTextColor(android.graphics.Color.parseColor(pagoColor))
 
         if (s.estado == "PENDIENTE") {
             holder.btnConfirmar.visibility = View.VISIBLE
