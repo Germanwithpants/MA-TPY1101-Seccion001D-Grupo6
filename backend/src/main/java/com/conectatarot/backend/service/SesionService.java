@@ -77,7 +77,7 @@ public class SesionService {
                 .fecha(request.getFecha())
                 .duracionMinutos(request.getDuracionMinutos())
                 .precioTotal(precioTotal)
-                .estado("PENDIENTE")
+                .estado("CONFIRMADA")
                 .build();
 
         return sesionRepository.save(sesion);
