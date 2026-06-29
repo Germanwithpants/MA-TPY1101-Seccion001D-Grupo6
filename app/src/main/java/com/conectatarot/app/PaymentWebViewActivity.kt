@@ -12,12 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 class PaymentWebViewActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
+    private var sesionId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment_webview)
 
-        val sesionId = intent.getIntExtra("sesionId", 0)
+        sesionId = intent.getIntExtra("sesionId", 0)
         val paymentUrl = intent.getStringExtra("paymentUrl") ?: ""
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
