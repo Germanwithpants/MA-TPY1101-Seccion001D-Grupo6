@@ -8,9 +8,6 @@ import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.conectatarot.app.network.RetrofitClient
-import kotlinx.coroutines.launch
 
 class PaymentWebViewActivity : AppCompatActivity() {
 
@@ -29,7 +26,7 @@ class PaymentWebViewActivity : AppCompatActivity() {
         val progress = findViewById<ProgressBar>(R.id.progressPago)
         val btnCerrar = findViewById<ImageButton>(R.id.btnCerrarPago)
 
-        btnCerrar.setOnClickListener { finish() }
+        btnCerrar.setOnClickListener { finishWithRefresh() }
 
         webView.apply {
             settings.javaScriptEnabled = true
@@ -37,7 +34,7 @@ class PaymentWebViewActivity : AppCompatActivity() {
 
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                    return false // let all URLs load in the WebView so the backend can process the payment
+                    return false
                 }
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
@@ -46,9 +43,9 @@ class PaymentWebViewActivity : AppCompatActivity() {
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     progress.visibility = View.GONE
-                    // Only trigger after our backend processes the return URL, not on the initial Transbank page
                     if (url != null && url.contains("/api/pagos/confirmar")) {
-                        checkPaymentAndClose(token, sesionId)
+                        Toast.makeText(this@PaymentWebViewActivity, "Procesando pago...", Toast.LENGTH_SHORT).show()
+                        finishWithRefresh()
                     }
                 }
             }
@@ -57,27 +54,13 @@ class PaymentWebViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkPaymentAndClose(token: String, sesionId: Int) {
-        lifecycleScope.launch {
-            try {
-                val resp = RetrofitClient.instance.estadoPago(sesionId)
-                val estado = resp.body()?.estadoPago ?: "DESCONOCIDO"
-                val msg = when (estado) {
-                    "PAGADO" -> "✅ Pago realizado con éxito"
-                    "FALLIDO" -> "❌ El pago falló. Inténtalo nuevamente."
-                    else -> "Pago procesado. Verifica el estado de tu sesión."
-                }
-                Toast.makeText(this@PaymentWebViewActivity, msg, Toast.LENGTH_LONG).show()
-            } catch (e: Exception) {
-                Toast.makeText(this@PaymentWebViewActivity, "Verifica el estado de tu sesión", Toast.LENGTH_SHORT).show()
-            }
-            setResult(RESULT_OK, Intent().putExtra("sesionId", sesionId))
-            finish()
-        }
+    private fun finishWithRefresh() {
+        setResult(RESULT_OK, Intent().putExtra("sesionId", sesionId))
+        finish()
     }
 
     override fun onBackPressed() {
         if (webView.canGoBack()) webView.goBack()
-        else super.onBackPressed()
+        else finishWithRefresh()
     }
 }
