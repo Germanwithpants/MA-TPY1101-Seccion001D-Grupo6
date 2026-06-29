@@ -277,7 +277,7 @@
 
         <!-- ── SECTION: LOGS ─────────────────────────────────────────────── -->
         <FrameLayout
-            android:id="@+id/sectionLogs"
+            android:id="@+id/sectionDisputas"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
@@ -288,8 +288,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="📋 Registro de Auditoría"
-                    android:textColor="#e8c3ff"
+                    android:text="⚠️ Disputas y Reportes"
+                    android:textColor="#ffcc44"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:padding="16dp"
@@ -297,7 +297,7 @@
                     android:layout_height="wrap_content"/>
 
                 <ProgressBar
-                    android:id="@+id/progressLogs"
+                    android:id="@+id/progressDisputas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -305,10 +305,10 @@
                     android:visibility="gone"/>
 
                 <TextView
-                    android:id="@+id/tvEmptyLogs"
+                    android:id="@+id/tvEmptyDisputas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sin actividad registrada"
+                    android:text="Sin disputas reportadas"
                     android:textColor="#9b59b6"
                     android:textSize="15sp"
                     android:layout_gravity="center"
@@ -316,7 +316,7 @@
                     android:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvLogs"
+                    android:id="@+id/rvDisputas"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="8dp"/>

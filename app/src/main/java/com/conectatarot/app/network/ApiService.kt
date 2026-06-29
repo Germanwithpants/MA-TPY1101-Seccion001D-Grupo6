@@ -158,6 +158,19 @@ interface ApiService {
 
     @GET("api/admin/logs")
     suspend fun getAdminLogs(@Header("Authorization") token: String): Response<AdminLogsResponse>
+
+    // Disputas
+    @POST("api/disputas")
+    suspend fun reportarDisputa(@Header("Authorization") token: String, @Body body: DisputaRequest): Response<Any>
+
+    @GET("api/admin/disputas")
+    suspend fun getAdminDisputas(@Header("Authorization") token: String): Response<DisputasResponse>
+
+    @PUT("api/admin/disputas/{id}/resolver")
+    suspend fun resolverDisputa(@Header("Authorization") token: String, @Path("id") id: Long, @Body body: Map<String, String>): Response<Any>
+
+    @PUT("api/admin/disputas/{id}/en-revision")
+    suspend fun marcarEnRevision(@Header("Authorization") token: String, @Path("id") id: Long): Response<Any>
 }
 
 // ── Data Classes ──────────────────────────────────────────────────────────────
@@ -295,3 +308,11 @@ data class AdminEstadisticasResponse(val success: Boolean, val data: AdminEstadi
 
 data class AdminLogItem(val id: Long, val accion: String, val entidad: String?, val entidadId: String?, val adminEmail: String?, val detalle: String?, val timestamp: String)
 data class AdminLogsResponse(val success: Boolean, val data: List<AdminLogItem>?)
+
+data class DisputaRequest(val sesionId: Int, val tipo: String, val descripcion: String)
+data class DisputaItem(
+    val id: Long, val sesionId: Int, val nombreCliente: String, val nombreTarotista: String,
+    val tipo: String, val descripcion: String?, val estado: String,
+    val reportadoPor: String, val fechaCreacion: String
+)
+data class DisputasResponse(val success: Boolean, val data: List<DisputaItem>?)

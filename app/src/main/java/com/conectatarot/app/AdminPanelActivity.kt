@@ -23,13 +23,13 @@ class AdminPanelActivity : AppCompatActivity() {
     private lateinit var sectionUsuarios: View
     private lateinit var sectionTarotistas: View
     private lateinit var sectionPagos: View
-    private lateinit var sectionLogs: View
+    private lateinit var sectionDisputas: View
 
     // Adapters
     private lateinit var usuariosAdapter: AdminUsuariosAdapter
     private lateinit var tarotistasAdapter: AdminTarotistasAdapter
     private lateinit var pagosAdapter: AdminPagosAdapter
-    private lateinit var logsAdapter: AdminLogsAdapter
+    private lateinit var disputasAdapter: AdminDisputasAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class AdminPanelActivity : AppCompatActivity() {
         sectionUsuarios   = findViewById(R.id.sectionUsuarios)
         sectionTarotistas = findViewById(R.id.sectionTarotistas)
         sectionPagos      = findViewById(R.id.sectionPagos)
-        sectionLogs       = findViewById(R.id.sectionLogs)
+        sectionDisputas   = findViewById(R.id.sectionDisputas)
 
         setupRecyclerViews()
 
@@ -61,7 +61,7 @@ class AdminPanelActivity : AppCompatActivity() {
                 R.id.admin_nav_usuarios   -> { showSection(1); cargarUsuarios();  true }
                 R.id.admin_nav_tarotistas -> { showSection(2); cargarTarotistas(); true }
                 R.id.admin_nav_pagos      -> { showSection(3); cargarPagos();     true }
-                R.id.admin_nav_logs       -> { showSection(4); cargarLogs();      true }
+                R.id.admin_nav_disputas   -> { showSection(4); cargarDisputas();  true }
                 else -> false
             }
         }
@@ -140,15 +140,26 @@ class AdminPanelActivity : AppCompatActivity() {
             adapter = pagosAdapter
         }
 
-        logsAdapter = AdminLogsAdapter(emptyList())
-        findViewById<RecyclerView>(R.id.rvLogs).apply {
+        disputasAdapter = AdminDisputasAdapter(
+            emptyList(),
+            onResolver = { d -> resolverDisputa(d) },
+            onEnRevision = { d ->
+                lifecycleScope.launch {
+                    try {
+                        RetrofitClient.instance.marcarEnRevision(token, d.id)
+                        cargarDisputas()
+                    } catch (e: Exception) { }
+                }
+            }
+        )
+        findViewById<RecyclerView>(R.id.rvDisputas).apply {
             layoutManager = LinearLayoutManager(this@AdminPanelActivity)
-            adapter = logsAdapter
+            adapter = disputasAdapter
         }
     }
 
     private fun showSection(index: Int) {
-        listOf(sectionDashboard, sectionUsuarios, sectionTarotistas, sectionPagos, sectionLogs)
+        listOf(sectionDashboard, sectionUsuarios, sectionTarotistas, sectionPagos, sectionDisputas)
             .forEachIndexed { i, v -> v.visibility = if (i == index) View.VISIBLE else View.GONE }
     }
 
@@ -241,24 +252,49 @@ class AdminPanelActivity : AppCompatActivity() {
         }
     }
 
-    private fun cargarLogs() {
-        val progress = findViewById<ProgressBar>(R.id.progressLogs)
-        val tvEmpty = findViewById<TextView>(R.id.tvEmptyLogs)
+    private fun cargarDisputas() {
+        val progress = findViewById<ProgressBar>(R.id.progressDisputas)
+        val tvEmpty = findViewById<TextView>(R.id.tvEmptyDisputas)
         progress.visibility = View.VISIBLE
         tvEmpty.visibility = View.GONE
         lifecycleScope.launch {
             try {
-                val resp = RetrofitClient.instance.getAdminLogs(token)
+                val resp = RetrofitClient.instance.getAdminDisputas(token)
                 progress.visibility = View.GONE
                 if (resp.isSuccessful) {
                     val lista = resp.body()?.data ?: emptyList()
                     if (lista.isEmpty()) tvEmpty.visibility = View.VISIBLE
-                    else logsAdapter.update(lista)
+                    else disputasAdapter.update(lista)
                 }
             } catch (e: Exception) {
                 progress.visibility = View.GONE
-                Toast.makeText(this@AdminPanelActivity, "Error al cargar logs", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AdminPanelActivity, "Error al cargar disputas", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun resolverDisputa(d: com.conectatarot.app.network.DisputaItem) {
+        val etResolucion = android.widget.EditText(this).apply {
+            hint = "Escribe la resolución (opcional)"
+            minLines = 2
+            setPadding(40, 20, 40, 10)
+        }
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Resolver disputa #${d.id}")
+            .setView(etResolucion)
+            .setPositiveButton("Marcar resuelta") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        RetrofitClient.instance.resolverDisputa(token, d.id,
+                            mapOf("resolucion" to etResolucion.text.toString().trim()))
+                        Toast.makeText(this@AdminPanelActivity, "Disputa resuelta", Toast.LENGTH_SHORT).show()
+                        cargarDisputas()
+                    } catch (e: Exception) {
+                        Toast.makeText(this@AdminPanelActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 }

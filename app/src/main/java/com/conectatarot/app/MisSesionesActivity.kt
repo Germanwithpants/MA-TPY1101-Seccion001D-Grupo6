@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.conectatarot.app.network.DisputaRequest
 import com.conectatarot.app.network.ResenaRequest
 import com.conectatarot.app.network.RetrofitClient
 import com.conectatarot.app.network.SesionItem
@@ -64,7 +65,8 @@ class MisSesionesActivity : AppCompatActivity() {
                             buildSectionedList(sesiones),
                             onCancelar = { sesion -> cancelarSesion(sesion.id) },
                             onCalificar = { sesion -> mostrarDialogoCalificar(sesion) },
-                            onPagar = { sesion -> iniciarPago(sesion) }
+                            onPagar = { sesion -> iniciarPago(sesion) },
+                            onReportar = { sesion -> mostrarDialogoDisputa(sesion) }
                         )
                     }
                 } else {
@@ -156,6 +158,74 @@ class MisSesionesActivity : AppCompatActivity() {
                         )
                         val msg = if (response.isSuccessful) "¡Gracias por tu calificación!" else "Error al enviar"
                         Toast.makeText(this@MisSesionesActivity, msg, Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this@MisSesionesActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun mostrarDialogoDisputa(sesion: SesionItem) {
+        val tipos = arrayOf(
+            "No vino el tarotista",
+            "No asistí (avisar al admin)",
+            "Problema técnico con la llamada",
+            "Calidad deficiente de la sesión",
+            "Otro"
+        )
+        val tiposCodigo = arrayOf(
+            "NO_SHOW_TAROTISTA", "NO_SHOW_CLIENTE", "PROBLEMA_TECNICO", "CALIDAD", "OTRO"
+        )
+        var tipoSeleccionado = 0
+
+        val spinnerTipo = android.widget.Spinner(this).apply {
+            adapter = android.widget.ArrayAdapter(this@MisSesionesActivity,
+                android.R.layout.simple_spinner_dropdown_item, tipos)
+            setSelection(0)
+            onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p: android.widget.AdapterView<*>?, v: android.view.View?, pos: Int, id: Long) { tipoSeleccionado = pos }
+                override fun onNothingSelected(p: android.widget.AdapterView<*>?) {}
+            }
+        }
+        val etDesc = EditText(this).apply {
+            hint = "Describe lo que ocurrió (opcional)"
+            minLines = 3
+            gravity = android.view.Gravity.TOP
+        }
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(40, 20, 40, 10)
+            addView(android.widget.TextView(this@MisSesionesActivity).apply {
+                text = "¿Qué ocurrió con la sesión?"
+                setPadding(0, 0, 0, 12)
+            })
+            addView(spinnerTipo)
+            addView(android.widget.TextView(this@MisSesionesActivity).apply {
+                text = "Detalles adicionales"
+                setPadding(0, 20, 0, 8)
+            })
+            addView(etDesc)
+        }
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle("⚠️ Reportar problema — ${sesion.nombreTarotista}")
+            .setView(layout)
+            .setPositiveButton("Enviar reporte") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        val resp = RetrofitClient.instance.reportarDisputa(
+                            "Bearer $token",
+                            DisputaRequest(sesion.id, tiposCodigo[tipoSeleccionado], etDesc.text.toString().trim())
+                        )
+                        if (resp.isSuccessful) {
+                            Toast.makeText(this@MisSesionesActivity,
+                                "Reporte enviado. El administrador lo revisará.", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(this@MisSesionesActivity,
+                                "Error al enviar (${resp.code()})", Toast.LENGTH_SHORT).show()
+                        }
                     } catch (e: Exception) {
                         Toast.makeText(this@MisSesionesActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
                     }

@@ -17,7 +17,7 @@
         android:icon="@android:drawable/ic_menu_manage"
         android:title="Pagos"/>
     <item
-        android:id="@+id/admin_nav_logs"
-        android:icon="@android:drawable/ic_menu_recent_history"
-        android:title="Logs"/>
+        android:id="@+id/admin_nav_disputas"
+        android:icon="@android:drawable/ic_dialog_alert"
+        android:title="Disputas"/>
 </menu>

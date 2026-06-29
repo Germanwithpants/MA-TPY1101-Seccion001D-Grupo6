@@ -18,7 +18,8 @@ class SesionAdapter(
     private val items: List<SesionListItem>,
     private val onCancelar: (SesionItem) -> Unit,
     private val onCalificar: (SesionItem) -> Unit,
-    private val onPagar: (SesionItem) -> Unit
+    private val onPagar: (SesionItem) -> Unit,
+    private val onReportar: (SesionItem) -> Unit = {}
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -39,6 +40,7 @@ class SesionAdapter(
         val btnPagar: Button = view.findViewById(R.id.btnPagarSesion)
         val btnVideollamada: Button = view.findViewById(R.id.btnVideollamada)
         val tvVideollamadaInfo: TextView = view.findViewById(R.id.tvVideollamadaInfo)
+        val btnReportar: Button = view.findViewById(R.id.btnReportarSesion)
     }
 
     override fun getItemViewType(position: Int) =
@@ -131,6 +133,13 @@ class SesionAdapter(
                 holder.btnCancelar.visibility = View.GONE
                 holder.btnPagar.visibility = View.GONE
             }
+        }
+
+        if (sesionCompletada(s)) {
+            holder.btnReportar.visibility = View.VISIBLE
+            holder.btnReportar.setOnClickListener { onReportar(s) }
+        } else {
+            holder.btnReportar.visibility = View.GONE
         }
 
         when {
