@@ -37,6 +37,8 @@ public interface SesionRepository extends JpaRepository<Sesion, Integer> {
             Pageable pageable
     );
 
+    List<Sesion> findByEstadoIn(List<String> estados);
+
     List<Sesion> findByEstadoPagoAndFechaBetweenOrderByFechaAsc(
             String estadoPago, LocalDateTime desde, LocalDateTime hasta);
 
