@@ -37,15 +37,7 @@ class PaymentWebViewActivity : AppCompatActivity() {
 
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                    val url = request.url.toString()
-                    // Detect Transbank return URL (backend redirect after payment)
-                    if (url.contains("/api/pagos/retorno") || url.contains("/api/pagos/exito") ||
-                        url.contains("token_ws") || url.contains("TBK_TOKEN")) {
-                        // Payment flow ended — check status and close
-                        checkPaymentAndClose(token, sesionId)
-                        return true
-                    }
-                    return false
+                    return false // let all URLs load in the WebView so the backend can process the payment
                 }
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
@@ -54,6 +46,11 @@ class PaymentWebViewActivity : AppCompatActivity() {
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     progress.visibility = View.GONE
+                    // Backend has already processed /api/pagos/confirmar — now safe to check status
+                    if (url != null && (url.contains("/api/pagos/confirmar") ||
+                            url.contains("token_ws") || url.contains("TBK_TOKEN"))) {
+                        checkPaymentAndClose(token, sesionId)
+                    }
                 }
             }
 
