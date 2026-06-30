@@ -1,6 +1,7 @@
 package com.conectatarot.app
 
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +20,6 @@ class PerfilTarotistaActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
-        val idUsuario = prefs.getInt("idUsuario", 0)
 
         val etNombrePro = findViewById<EditText>(R.id.etEditNombrePro)
         val etDescripcion = findViewById<EditText>(R.id.etEditDescripcion)
@@ -51,15 +51,23 @@ class PerfilTarotistaActivity : AppCompatActivity() {
             }
 
             val precio = precios[spinnerPrecio.selectedItemPosition].toDouble()
-
             btnGuardar.isEnabled = false
             btnGuardar.text = "Guardando..."
 
             lifecycleScope.launch {
                 try {
+                    val idTarotista = resolverIdTarotista(token, prefs)
+                    if (idTarotista == 0) {
+                        tvResultado.text = "❌ No se encontró tu perfil de tarotista"
+                        tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
+                        btnGuardar.isEnabled = true
+                        btnGuardar.text = "Guardar cambios"
+                        return@launch
+                    }
+
                     val response = RetrofitClient.instance.editarPerfilTarotista(
                         "Bearer $token",
-                        idUsuario,
+                        idTarotista,
                         EditarPerfilTarotistaRequest(nombrePro, descripcion, precio)
                     )
                     if (response.isSuccessful) {
@@ -67,6 +75,7 @@ class PerfilTarotistaActivity : AppCompatActivity() {
                             .putString("nombreProfesional", nombrePro)
                             .putString("descripcion", descripcion)
                             .putString("precioBase", precio.toInt().toString())
+                            .putInt("idTarotista", idTarotista)
                             .apply()
                         tvResultado.text = "✅ Perfil actualizado correctamente"
                         tvResultado.setTextColor(getColor(android.R.color.holo_green_light))
@@ -88,5 +97,31 @@ class PerfilTarotistaActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // Returns the real tarotista row ID, caching it in prefs after first lookup.
+    // Tries: 1) cached value, 2) sessions endpoint, 3) tarotistas list by nombreProfesional.
+    private suspend fun resolverIdTarotista(token: String, prefs: android.content.SharedPreferences): Int {
+        val cached = prefs.getInt("idTarotista", 0)
+        if (cached != 0) return cached
+
+        // Try sessions — each session carries the tarotistaId
+        try {
+            val resp = RetrofitClient.instance.getSesionesTarotista("Bearer $token")
+            val id = resp.body()?.data?.content?.firstOrNull()?.tarotistaId ?: 0
+            if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
+        } catch (_: Exception) {}
+
+        // Fallback: match by stored nombreProfesional in the public tarotistas list
+        val nombrePro = prefs.getString("nombreProfesional", "") ?: ""
+        if (nombrePro.isNotBlank()) {
+            try {
+                val resp = RetrofitClient.instance.getTarotistas("Bearer $token")
+                val id = resp.body()?.data?.firstOrNull { it.nombreProfesional == nombrePro }?.id ?: 0
+                if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
+            } catch (_: Exception) {}
+        }
+
+        return 0
     }
 }

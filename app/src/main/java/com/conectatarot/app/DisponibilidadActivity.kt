@@ -32,7 +32,8 @@ class DisponibilidadActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
-        val tarotistaId = prefs.getInt("idUsuario", 0)
+        val tarotistaId = prefs.getInt("idTarotista", 0).takeIf { it != 0 }
+            ?: prefs.getInt("idUsuario", 0)
 
         val spinnerDia = findViewById<Spinner>(R.id.spinnerDia)
         val etHoraInicio = findViewById<EditText>(R.id.etHoraInicio)
