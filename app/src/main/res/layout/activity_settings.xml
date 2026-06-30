@@ -75,7 +75,20 @@
                     android:layout_weight="1" android:text="🔑  Cambiar contraseña"
                     android:textColor="#e8c3ff" android:textSize="15sp"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Próximamente" android:textColor="#7d3cae" android:textSize="12sp"/>
+                    android:text="›" android:textColor="#7d3cae" android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/rowVerificacion"
+                android:layout_width="match_parent" android:layout_height="56dp"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:paddingLeft="16dp" android:paddingRight="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:visibility="gone">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="🔐  Verificar identidad"
+                    android:textColor="#e8c3ff" android:textSize="15sp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="#7d3cae" android:textSize="20sp"/>
             </LinearLayout>
 
             <LinearLayout android:id="@+id/rowDispositivos"

@@ -187,6 +187,20 @@ interface ApiService {
     @GET("api/admin/logs")
     suspend fun getAdminLogs(@Header("Authorization") token: String): Response<AdminLogsResponse>
 
+    // Verificación
+    @POST("api/verificacion/{tarotistaId}/solicitar")
+    suspend fun solicitarVerificacion(
+        @Header("Authorization") token: String,
+        @Path("tarotistaId") tarotistaId: Int,
+        @Body request: VerificacionRequest
+    ): Response<Any>
+
+    @GET("api/verificacion/{tarotistaId}/estado")
+    suspend fun getEstadoVerificacion(
+        @Header("Authorization") token: String,
+        @Path("tarotistaId") tarotistaId: Int
+    ): Response<VerificacionStatusResponse>
+
     // Disputas
     @POST("api/disputas")
     suspend fun reportarDisputa(@Header("Authorization") token: String, @Body body: DisputaRequest): Response<Any>
@@ -253,7 +267,8 @@ data class Tarotista(
     val estado: String?,
     val especialidades: List<String>?,
     val promedio: Double? = null,
-    val totalResenas: Int? = null
+    val totalResenas: Int? = null,
+    val verificado: Boolean? = false
 )
 
 data class TarotistasResponse(val success: Boolean, val message: String, val data: List<Tarotista>?)
@@ -349,6 +364,23 @@ data class AdminEstadisticasResponse(val success: Boolean, val data: AdminEstadi
 
 data class AdminLogItem(val id: Long, val accion: String, val entidad: String?, val entidadId: String?, val adminEmail: String?, val detalle: String?, val timestamp: String)
 data class AdminLogsResponse(val success: Boolean, val data: List<AdminLogItem>?)
+
+data class VerificacionRequest(
+    val rut: String,
+    val nombreCompleto: String,
+    val banco: String,
+    val tipoCuenta: String,
+    val numeroCuenta: String,
+    val titularCuenta: String
+)
+
+data class VerificacionStatus(
+    val estado: String,
+    val fechaSolicitud: String? = null,
+    val observacion: String? = null
+)
+
+data class VerificacionStatusResponse(val success: Boolean, val data: VerificacionStatus?)
 
 data class DisputaRequest(val sesionId: Int, val tipo: String, val descripcion: String)
 data class DisputaItem(

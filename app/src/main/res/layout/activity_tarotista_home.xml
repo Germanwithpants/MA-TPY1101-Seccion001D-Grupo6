@@ -33,6 +33,73 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/bannerVerificacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#2a1040"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvBannerVerificacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#f39c12"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/tvBannerVerificacionAccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verificar →"
+            android:textColor="#d4aaff"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:padding="4dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutMetricas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#160837"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvMetricaSesiones"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#9b59b6"
+            android:textSize="12sp"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="14dp"
+            android:background="#2d1654"/>
+
+        <TextView
+            android:id="@+id/tvMetricaRating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#9b59b6"
+            android:textSize="12sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

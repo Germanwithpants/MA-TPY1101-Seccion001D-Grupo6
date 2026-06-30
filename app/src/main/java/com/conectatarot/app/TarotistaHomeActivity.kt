@@ -45,6 +45,8 @@ class TarotistaHomeActivity : AppCompatActivity() {
         }
 
         cargarSesiones()
+        cargarVerificacion()
+        cargarMetricas()
     }
 
     private fun cargarSesiones() {
@@ -59,6 +61,11 @@ class TarotistaHomeActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val sesiones = (response.body()!!.data?.content ?: emptyList())
                         .sortedByDescending { it.fecha }
+                    val completadas = sesiones.count { esPasada(it) && it.estado in listOf("COMPLETADA", "CONFIRMADA") }
+                    if (completadas > 0) {
+                        findViewById<TextView>(R.id.tvMetricaSesiones).text = "$completadas sesiones completadas"
+                        findViewById<android.widget.LinearLayout>(R.id.layoutMetricas).visibility = View.VISIBLE
+                    }
                     if (sesiones.isEmpty()) {
                         tvEmpty.visibility = View.VISIBLE
                     } else {
@@ -138,6 +145,83 @@ class TarotistaHomeActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(this@TarotistaHomeActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun cargarVerificacion() {
+        val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
+        val token = prefs.getString("token", "") ?: ""
+        val tarotistaId = prefs.getInt("idTarotista", 0).takeIf { it != 0 }
+            ?: prefs.getInt("idUsuario", 0)
+
+        val banner   = findViewById<android.widget.LinearLayout>(R.id.bannerVerificacion)
+        val tvMsg    = findViewById<TextView>(R.id.tvBannerVerificacion)
+        val tvAccion = findViewById<TextView>(R.id.tvBannerVerificacionAccion)
+
+        val goVerif = View.OnClickListener {
+            startActivity(Intent(this, VerificacionActivity::class.java))
+        }
+
+        lifecycleScope.launch {
+            try {
+                val resp = RetrofitClient.instance.getEstadoVerificacion("Bearer $token", tarotistaId)
+                if (resp.isSuccessful) {
+                    when (resp.body()?.data?.estado) {
+                        "VERIFICADO" -> { /* badge confirmed — no banner needed */ }
+                        "PENDIENTE" -> {
+                            tvMsg.text = "⏳ Verificación en revisión"
+                            tvMsg.setTextColor(0xFF3498db.toInt())
+                            tvAccion.visibility = View.GONE
+                            banner.visibility = View.VISIBLE
+                        }
+                        "RECHAZADO" -> {
+                            tvMsg.text = "❌ Verificación rechazada — reintentar"
+                            tvMsg.setTextColor(0xFFe74c3c.toInt())
+                            tvAccion.setOnClickListener(goVerif)
+                            banner.visibility = View.VISIBLE
+                        }
+                        else -> mostrarBannerNoVerificado(tvMsg, tvAccion, banner, goVerif)
+                    }
+                } else {
+                    mostrarBannerNoVerificado(tvMsg, tvAccion, banner, goVerif)
+                }
+            } catch (_: Exception) {
+                mostrarBannerNoVerificado(tvMsg, tvAccion, banner, goVerif)
+            }
+        }
+    }
+
+    private fun mostrarBannerNoVerificado(
+        tvMsg: TextView, tvAccion: TextView,
+        banner: android.widget.LinearLayout, listener: View.OnClickListener
+    ) {
+        tvMsg.text = "⚠ Tu perfil no está verificado"
+        tvMsg.setTextColor(0xFFf39c12.toInt())
+        tvAccion.setOnClickListener(listener)
+        banner.setOnClickListener(listener)
+        banner.visibility = View.VISIBLE
+    }
+
+    private fun cargarMetricas() {
+        val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
+        val token = prefs.getString("token", "") ?: ""
+        val tarotistaId = prefs.getInt("idTarotista", 0).takeIf { it != 0 }
+            ?: prefs.getInt("idUsuario", 0)
+
+        val layoutMetricas = findViewById<android.widget.LinearLayout>(R.id.layoutMetricas)
+        val tvRating = findViewById<TextView>(R.id.tvMetricaRating)
+
+        lifecycleScope.launch {
+            try {
+                val resp = RetrofitClient.instance.getResenasTarotista("Bearer $token", tarotistaId)
+                if (resp.isSuccessful) {
+                    val body = resp.body()
+                    val promedio = body?.promedio ?: 0.0
+                    val total = body?.total ?: 0
+                    tvRating.text = if (total > 0) "⭐ ${String.format("%.1f", promedio)} ($total reseñas)" else "⭐ Sin reseñas aún"
+                    layoutMetricas.visibility = View.VISIBLE
+                }
+            } catch (_: Exception) {}
         }
     }
 

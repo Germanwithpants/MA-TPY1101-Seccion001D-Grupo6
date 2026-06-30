@@ -56,6 +56,7 @@
         <activity android:name=".DisponibilidadActivity"/>
         <activity android:name=".AdminPanelActivity"/>
         <activity android:name=".SettingsActivity"/>
+        <activity android:name=".VerificacionActivity"/>
 
         <service
             android:name=".MyFirebaseMessagingService"

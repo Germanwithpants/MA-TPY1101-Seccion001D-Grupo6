@@ -43,6 +43,15 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(Intent(this, PerfilActivity::class.java))
         }
 
+        // Verificar identidad — solo para tarotistas
+        val rowVerificacion = findViewById<View>(R.id.rowVerificacion)
+        if (esTarotista) {
+            rowVerificacion.visibility = View.VISIBLE
+            rowVerificacion.setOnClickListener {
+                startActivity(Intent(this, VerificacionActivity::class.java))
+            }
+        }
+
         // Cambiar contraseña — implementado
         findViewById<View>(R.id.rowCambiarPassword).setOnClickListener {
             mostrarDialogoCambiarPassword()

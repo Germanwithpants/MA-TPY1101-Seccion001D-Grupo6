@@ -28,7 +28,7 @@ class TarotistaAdapter(private val tarotistas: List<Tarotista>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val t = tarotistas[position]
-        holder.tvNombre.text = t.nombreProfesional
+        holder.tvNombre.text = if (t.verificado == true) "✅ ${t.nombreProfesional}" else t.nombreProfesional
         holder.tvDescripcion.text = t.descripcion ?: "Sin descripción"
         holder.tvPrecio.text = "$ ${t.precioBase?.toInt() ?: 0}"
         holder.tvEspecialidades.text = t.especialidades?.joinToString(" • ") ?: ""
