@@ -47,6 +47,12 @@ interface ApiService {
     @POST("api/tarotistas")
     suspend fun registrarTarotista(@Body request: RegistroTarotistaRequest): Response<RegistroResponse>
 
+    @GET("api/tarotistas/usuario/{usuarioId}")
+    suspend fun getTarotistaByUsuario(
+        @Header("Authorization") token: String,
+        @Path("usuarioId") usuarioId: Int
+    ): Response<TarotistaResponse>
+
     @PUT("api/tarotistas/{id}/perfil")
     suspend fun editarPerfilTarotista(
         @Header("Authorization") token: String,
@@ -272,6 +278,7 @@ data class Tarotista(
 )
 
 data class TarotistasResponse(val success: Boolean, val message: String, val data: List<Tarotista>?)
+data class TarotistaResponse(val success: Boolean, val message: String, val data: Tarotista?)
 
 data class Especialidad(val id: Int, val nombre: String)
 data class EspecialidadesResponse(val success: Boolean, val data: List<Especialidad>?)

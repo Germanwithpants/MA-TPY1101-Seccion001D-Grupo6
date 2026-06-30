@@ -72,6 +72,8 @@ class CompletarPerfilTarotistaActivity : AppCompatActivity() {
                             .putString("descripcion", descripcion)
                             .putString("precioBase", precio.toInt().toString())
                             .apply()
+                        // Resolve and cache idTarotista now — the profile exists in the DB
+                        TarotistaUtils.resolverIdTarotista(token, prefs)
                         startActivity(Intent(this@CompletarPerfilTarotistaActivity, DisponibilidadActivity::class.java).apply {
                             putExtra("isOnboarding", true)
                         })

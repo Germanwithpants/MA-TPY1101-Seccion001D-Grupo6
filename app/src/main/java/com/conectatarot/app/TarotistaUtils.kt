@@ -9,7 +9,19 @@ object TarotistaUtils {
         val cached = prefs.getInt("idTarotista", 0)
         if (cached != 0) return cached
 
-        // Try sessions — each session carries tarotistaId
+        val idUsuario = prefs.getInt("idUsuario", 0)
+
+        // 1. Direct lookup by usuarioId — works even for pending/new tarotistas
+        if (idUsuario != 0) {
+            try {
+                val id = RetrofitClient.instance
+                    .getTarotistaByUsuario("Bearer $token", idUsuario)
+                    .body()?.data?.id ?: 0
+                if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
+            } catch (_: Exception) {}
+        }
+
+        // 2. Try sessions — each session carries tarotistaId
         try {
             val id = RetrofitClient.instance
                 .getSesionesTarotista("Bearer $token")
@@ -17,7 +29,7 @@ object TarotistaUtils {
             if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
         } catch (_: Exception) {}
 
-        // Fallback: match by nombreProfesional in the public tarotistas list
+        // 3. Match by nombreProfesional in the public tarotistas list
         val nombrePro = prefs.getString("nombreProfesional", "") ?: ""
         if (nombrePro.isNotBlank()) {
             try {
