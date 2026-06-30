@@ -6,6 +6,7 @@
     android:background="#1a0a2e"
     android:fitsSystemWindows="true">
 
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +34,7 @@
 
     </LinearLayout>
 
+    <!-- Verification banner -->
     <LinearLayout
         android:id="@+id/bannerVerificacion"
         android:layout_width="match_parent"
@@ -64,6 +66,7 @@
 
     </LinearLayout>
 
+    <!-- Metrics row -->
     <LinearLayout
         android:id="@+id/layoutMetricas"
         android:layout_width="match_parent"
@@ -100,35 +103,12 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="📅 Mi Agenda"
-        android:textColor="#e8c3ff"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:paddingLeft="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/tvEmptyAgenda"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No tienes sesiones pendientes"
-        android:textColor="#9b59b6"
-        android:textSize="16sp"
-        android:layout_gravity="center"
-        android:layout_marginTop="60dp"
-        android:visibility="gone"/>
-
+    <!-- Action buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="8dp">
+        android:padding="12dp">
 
         <Button
             android:id="@+id/btnEditarPerfilTarotista"
@@ -166,18 +146,89 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressAgenda"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminateTint="#7d3cae"
-        android:visibility="gone"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAgenda"
+    <!-- Agenda section header -->
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"/>
+        android:layout_height="wrap_content"
+        android:text="📅 Mi Agenda"
+        android:textColor="#e8c3ff"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="#1f0d40"/>
+
+    <!-- Content area: list, empty state, and loader overlap -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAgenda"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:clipToPadding="false"/>
+
+        <!-- Empty state -->
+        <LinearLayout
+            android:id="@+id/tvEmptyAgenda"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📭"
+                android:textSize="64sp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aún no tienes sesiones"
+                android:textColor="#d4aaff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Configura tus horarios disponibles para que los clientes puedan agendarte."
+                android:textColor="#9b59b6"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.4"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🗓 Ir a Horarios →"
+                android:textColor="#d4aaff"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:id="@+id/tvEmptyIrHorarios"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressAgenda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="#7d3cae"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
 </LinearLayout>

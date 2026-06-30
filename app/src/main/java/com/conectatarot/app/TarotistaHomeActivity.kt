@@ -17,7 +17,7 @@ class TarotistaHomeActivity : AppCompatActivity() {
 
     private lateinit var token: String
     private lateinit var rvAgenda: RecyclerView
-    private lateinit var tvEmpty: TextView
+    private lateinit var tvEmpty: View
     private lateinit var progressAgenda: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +36,10 @@ class TarotistaHomeActivity : AppCompatActivity() {
         val irSettings = View.OnClickListener { startActivity(Intent(this, SettingsActivity::class.java)) }
         findViewById<TextView>(R.id.tvAjustesTarotista).setOnClickListener(irSettings)
         findViewById<Button>(R.id.btnAjustesTarotista).setOnClickListener(irSettings)
+
+        findViewById<View>(R.id.tvEmptyIrHorarios).setOnClickListener {
+            startActivity(Intent(this, DisponibilidadActivity::class.java))
+        }
 
         findViewById<Button>(R.id.btnEditarPerfilTarotista).setOnClickListener {
             startActivity(Intent(this, PerfilTarotistaActivity::class.java))
