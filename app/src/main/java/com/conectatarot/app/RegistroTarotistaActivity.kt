@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.conectatarot.app.network.RegistroTarotistaRequest
 import com.conectatarot.app.network.RetrofitClient
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class RegistroTarotistaActivity : AppCompatActivity() {
 
@@ -70,7 +71,13 @@ class RegistroTarotistaActivity : AppCompatActivity() {
                         tvResultado.setTextColor(getColor(android.R.color.holo_green_light))
                         btnRegistrar.text = "Registrado"
                     } else {
-                        tvResultado.text = "❌ El email ya está registrado"
+                        val msg = try {
+                            val body = response.errorBody()?.string() ?: ""
+                            JSONObject(body).optString("message", "").ifBlank {
+                                JSONObject(body).optString("error", "")
+                            }
+                        } catch (_: Exception) { "" }
+                        tvResultado.text = "❌ ${msg.ifBlank { "Error al registrar (${response.code()})" }}"
                         tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
                         btnRegistrar.isEnabled = true
                         btnRegistrar.text = "Registrarme como Tarotista"
