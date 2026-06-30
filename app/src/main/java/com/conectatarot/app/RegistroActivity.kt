@@ -3,6 +3,7 @@ package com.conectatarot.app
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.conectatarot.app.network.RegistroRequest
 import com.conectatarot.app.network.RetrofitClient
@@ -20,8 +21,11 @@ class RegistroActivity : AppCompatActivity() {
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
         val tvResultado = findViewById<TextView>(R.id.tvResultadoRegistro)
         val tvVolver = findViewById<TextView>(R.id.tvVolverRegistro)
+        val checkTerminos = findViewById<CheckBox>(R.id.checkTerminos)
+        val tvVerTerminos = findViewById<View>(R.id.tvVerTerminos)
 
         tvVolver.setOnClickListener { finish() }
+        tvVerTerminos.setOnClickListener { PoliticaHelper.mostrar(this) }
 
         btnRegistrar.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
@@ -36,6 +40,12 @@ class RegistroActivity : AppCompatActivity() {
 
             if (password.length < 6) {
                 tvResultado.text = "La contraseña debe tener al menos 6 caracteres"
+                tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
+                return@setOnClickListener
+            }
+
+            if (!checkTerminos.isChecked) {
+                tvResultado.text = "Debes aceptar los Términos de Uso y la Política de Privacidad"
                 tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
                 return@setOnClickListener
             }

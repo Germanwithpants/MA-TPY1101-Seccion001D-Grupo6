@@ -1,6 +1,7 @@
 package com.conectatarot.app
 
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -23,8 +24,11 @@ class RegistroTarotistaActivity : AppCompatActivity() {
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrarTarotista)
         val tvResultado = findViewById<TextView>(R.id.tvResultadoTarotista)
         val tvVolver = findViewById<TextView>(R.id.tvVolverTarotista)
+        val checkTerminos = findViewById<CheckBox>(R.id.checkTerminosTarotista)
+        val tvVerTerminos = findViewById<View>(R.id.tvVerTerminosTarotista)
 
         tvVolver.setOnClickListener { finish() }
+        tvVerTerminos.setOnClickListener { PoliticaHelper.mostrar(this) }
 
         btnRegistrar.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
@@ -37,6 +41,12 @@ class RegistroTarotistaActivity : AppCompatActivity() {
             if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() ||
                 nombrePro.isEmpty() || descripcion.isEmpty() || precioStr.isEmpty()) {
                 tvResultado.text = "Por favor completa todos los campos"
+                tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
+                return@setOnClickListener
+            }
+
+            if (!checkTerminos.isChecked) {
+                tvResultado.text = "Debes aceptar los Términos de Uso y la Política de Privacidad"
                 tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
                 return@setOnClickListener
             }

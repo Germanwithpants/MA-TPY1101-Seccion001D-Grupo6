@@ -181,6 +181,39 @@
             android:inputType="number"
             android:layout_marginBottom="32dp"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkTerminosTarotista"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#9b59b6"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="He leído y acepto los Términos de Uso y la Política de Privacidad"
+                android:textColor="#d4aaff"
+                android:textSize="13sp"
+                android:paddingStart="8dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvVerTerminosTarotista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📄 Leer Términos y Política de Privacidad →"
+            android:textColor="#9b59b6"
+            android:textSize="12sp"
+            android:paddingBottom="16dp"/>
+
         <Button
             android:id="@+id/btnRegistrarTarotista"
             android:layout_width="match_parent"
