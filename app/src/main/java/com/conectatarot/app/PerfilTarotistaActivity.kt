@@ -1,18 +1,27 @@
 package com.conectatarot.app
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.conectatarot.app.network.AgregarEspecialidadRequest
 import com.conectatarot.app.network.EditarPerfilTarotistaRequest
+import com.conectatarot.app.network.Especialidad
 import com.conectatarot.app.network.RetrofitClient
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class PerfilTarotistaActivity : AppCompatActivity() {
 
     private val precios = listOf(5000, 8000, 10000, 12000, 15000, 18000, 20000, 25000, 30000, 35000, 40000, 45000)
+    private var idTarotista = 0
+    private var todasEspecialidades = listOf<Especialidad>()
+    private var especialidadesActuales = setOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +44,14 @@ class PerfilTarotistaActivity : AppCompatActivity() {
         etNombrePro.setText(prefs.getString("nombreProfesional", "") ?: "")
         etDescripcion.setText(prefs.getString("descripcion", "") ?: "")
         val precioGuardado = prefs.getString("precioBase", "15000")?.toDoubleOrNull()?.toInt() ?: 15000
-        val idx = precios.indexOfFirst { it >= precioGuardado }.takeIf { it >= 0 } ?: 0
-        spinnerPrecio.setSelection(idx)
+        spinnerPrecio.setSelection((precios.indexOfFirst { it >= precioGuardado }).takeIf { it >= 0 } ?: 0)
 
         tvVolver.setOnClickListener { finish() }
+
+        lifecycleScope.launch {
+            idTarotista = TarotistaUtils.resolverIdTarotista(token, prefs)
+            cargarEspecialidades(token)
+        }
 
         btnGuardar.setOnClickListener {
             val nombrePro = etNombrePro.text.toString().trim()
@@ -56,7 +69,7 @@ class PerfilTarotistaActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    val idTarotista = resolverIdTarotista(token, prefs)
+                    if (idTarotista == 0) idTarotista = TarotistaUtils.resolverIdTarotista(token, prefs)
                     if (idTarotista == 0) {
                         tvResultado.text = "❌ No se encontró tu perfil de tarotista"
                         tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
@@ -66,10 +79,10 @@ class PerfilTarotistaActivity : AppCompatActivity() {
                     }
 
                     val response = RetrofitClient.instance.editarPerfilTarotista(
-                        "Bearer $token",
-                        idTarotista,
+                        "Bearer $token", idTarotista,
                         EditarPerfilTarotistaRequest(nombrePro, descripcion, precio)
                     )
+
                     if (response.isSuccessful) {
                         prefs.edit()
                             .putString("nombreProfesional", nombrePro)
@@ -77,6 +90,9 @@ class PerfilTarotistaActivity : AppCompatActivity() {
                             .putString("precioBase", precio.toInt().toString())
                             .putInt("idTarotista", idTarotista)
                             .apply()
+
+                        guardarEspecialidades(token)
+
                         tvResultado.text = "✅ Perfil actualizado correctamente"
                         tvResultado.setTextColor(getColor(android.R.color.holo_green_light))
                         btnGuardar.text = "Guardado ✓"
@@ -99,6 +115,60 @@ class PerfilTarotistaActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun resolverIdTarotista(token: String, prefs: android.content.SharedPreferences): Int =
-        TarotistaUtils.resolverIdTarotista(token, prefs)
+    private suspend fun cargarEspecialidades(token: String) {
+        try {
+            val todas = RetrofitClient.instance.getEspecialidades().body()?.data ?: return
+            todasEspecialidades = todas
+
+            val actuales = if (idTarotista != 0)
+                RetrofitClient.instance.getEspecialidadesTarotista(idTarotista).body()?.data ?: emptyList()
+            else emptyList()
+            especialidadesActuales = actuales.map { it.id }.toSet()
+
+            val chipGroup = ChipGroup(this).apply {
+                isSingleSelection = false
+            }
+            todas.forEach { esp ->
+                val chip = Chip(this).apply {
+                    text = esp.nombre
+                    isCheckable = true
+                    isChecked = esp.id in especialidadesActuales
+                    tag = esp.id
+                    chipBackgroundColor = ColorStateList(
+                        arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+                        intArrayOf(Color.parseColor("#7d3cae"), Color.parseColor("#2d1654"))
+                    )
+                    setTextColor(Color.WHITE)
+                    chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#9b59b6"))
+                    chipStrokeWidth = 1f
+                }
+                chipGroup.addView(chip)
+            }
+
+            val layout = findViewById<LinearLayout>(R.id.layoutEspecialidades)
+            layout.removeAllViews()
+            layout.addView(chipGroup)
+        } catch (_: Exception) {}
+    }
+
+    private suspend fun guardarEspecialidades(token: String) {
+        if (idTarotista == 0) return
+        val layout = findViewById<LinearLayout>(R.id.layoutEspecialidades)
+        if (layout.childCount == 0) return
+        val chipGroup = layout.getChildAt(0) as? ChipGroup ?: return
+
+        val seleccionadas = mutableSetOf<Int>()
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as? Chip ?: continue
+            if (chip.isChecked) seleccionadas.add(chip.tag as Int)
+        }
+
+        seleccionadas.filter { it !in especialidadesActuales }.forEach { id ->
+            try { RetrofitClient.instance.agregarEspecialidad("Bearer $token", idTarotista, AgregarEspecialidadRequest(id)) } catch (_: Exception) {}
+        }
+        especialidadesActuales.filter { it !in seleccionadas }.forEach { id ->
+            try { RetrofitClient.instance.eliminarEspecialidad("Bearer $token", idTarotista, id) } catch (_: Exception) {}
+        }
+        especialidadesActuales = seleccionadas
+    }
 }

@@ -67,6 +67,7 @@ class ClienteActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        cargarTarotistas(filtroEspecialidad)
         cargarPendientesCalificar()
     }
 

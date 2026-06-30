@@ -89,6 +89,21 @@ interface ApiService {
         @Body request: DisponibilidadRequest
     ): Response<Any>
 
+    // Especialidades (write)
+    @POST("api/tarotistas/{tarotistaId}/especialidades")
+    suspend fun agregarEspecialidad(
+        @Header("Authorization") token: String,
+        @Path("tarotistaId") tarotistaId: Int,
+        @Body request: AgregarEspecialidadRequest
+    ): Response<Any>
+
+    @DELETE("api/tarotistas/{tarotistaId}/especialidades/{especialidadId}")
+    suspend fun eliminarEspecialidad(
+        @Header("Authorization") token: String,
+        @Path("tarotistaId") tarotistaId: Int,
+        @Path("especialidadId") especialidadId: Int
+    ): Response<Any>
+
     @DELETE("api/tarotistas/{tarotistaId}/disponibilidad/{disponibilidadId}")
     suspend fun deleteDisponibilidad(
         @Header("Authorization") token: String,
@@ -283,6 +298,8 @@ data class TarotistaResponse(val success: Boolean, val message: String, val data
 data class Especialidad(val id: Int, val nombre: String)
 data class EspecialidadesResponse(val success: Boolean, val data: List<Especialidad>?)
 data class EspecialidadesTarotistaResponse(val success: Boolean, val data: List<Especialidad>?)
+
+data class AgregarEspecialidadRequest(val especialidadId: Int)
 
 data class DisponibilidadItem(
     val id: Int,

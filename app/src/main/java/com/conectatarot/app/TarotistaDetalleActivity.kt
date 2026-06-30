@@ -40,7 +40,22 @@ class TarotistaDetalleActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.tvVolver).setOnClickListener { finish() }
 
-        if (tarotistaId > 0) cargarResenas(token, tarotistaId)
+        if (tarotistaId > 0) {
+            cargarResenas(token, tarotistaId)
+            cargarVerificacion(token, tarotistaId)
+        }
+    }
+
+    private fun cargarVerificacion(token: String, tarotistaId: Int) {
+        lifecycleScope.launch {
+            try {
+                val resp = RetrofitClient.instance.getEstadoVerificacion("Bearer $token", tarotistaId)
+                if (resp.isSuccessful && resp.body()?.data?.estado == "VERIFICADO") {
+                    val tvNombre = findViewById<TextView>(R.id.tvDetNombre)
+                    tvNombre.text = "${tvNombre.text} ✅"
+                }
+            } catch (_: Exception) {}
+        }
     }
 
     private fun cargarResenas(token: String, tarotistaId: Int) {
