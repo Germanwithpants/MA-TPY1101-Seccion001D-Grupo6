@@ -30,6 +30,13 @@ interface ApiService {
         @Body request: FcmTokenRequest
     ): Response<Any>
 
+    @PUT("api/usuarios/{id}/password")
+    suspend fun cambiarPassword(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body request: CambiarPasswordRequest
+    ): Response<Any>
+
     // Tarotistas
     @GET("api/tarotistas")
     suspend fun getTarotistas(
@@ -132,6 +139,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("sesionId") sesionId: Int
     ): Response<ExisteResenaResponse>
+
+    @POST("api/resenas/cliente")
+    suspend fun crearResenaCliente(
+        @Header("Authorization") token: String,
+        @Body request: ResenaClienteRequest
+    ): Response<Any>
 
     // Pagos
     @POST("api/pagos/iniciar/{sesionId}")
@@ -279,8 +292,11 @@ data class SesionItem(
     val precioTotal: Double,
     val estado: String,
     val estadoPago: String? = "PENDIENTE",
-    val tarotistaId: Int? = null
+    val tarotistaId: Int? = null,
+    val fechaCreacion: String? = null
 )
+data class CambiarPasswordRequest(val passwordActual: String, val passwordNueva: String)
+data class ResenaClienteRequest(val sesionId: Int, val tarotistaId: Int, val calificacion: Int, val comentario: String)
 
 data class PagedData(
     val content: List<SesionItem>?,

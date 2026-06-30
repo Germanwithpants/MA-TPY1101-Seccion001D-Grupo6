@@ -101,6 +101,20 @@ class AgendarActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val fechaCompleta = "${fecha}T${hora}:00"
+            try {
+                val fechaDT = java.time.LocalDateTime.parse(fechaCompleta)
+                if (fechaDT.isBefore(java.time.LocalDateTime.now())) {
+                    tvResultado.text = "❌ No puedes agendar en una fecha u hora pasada"
+                    tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
+                    return@setOnClickListener
+                }
+            } catch (e: Exception) {
+                tvResultado.text = "❌ Fecha u hora inválida"
+                tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
+                return@setOnClickListener
+            }
+
             val duracionMinutos = when (spinnerDuracion.selectedItemPosition) {
                 0 -> 30
                 1 -> 60
@@ -108,7 +122,6 @@ class AgendarActivity : AppCompatActivity() {
             }
             val especialidadId = if (especialidades.isEmpty()) 1
                                  else especialidades[spinnerEspecialidad.selectedItemPosition].id
-            val fechaCompleta = "${fecha}T${hora}:00"
 
             btnConfirmar.isEnabled = false
             btnConfirmar.text = "Agendando..."
@@ -128,8 +141,10 @@ class AgendarActivity : AppCompatActivity() {
                     )
                     progressAgendar.visibility = View.GONE
                     if (response.isSuccessful) {
-                        tvResultado.text = "✅ Sesión agendada. Espera la confirmación del tarotista."
-                        tvResultado.setTextColor(getColor(android.R.color.holo_green_light))
+                        val sesionId = try {
+                            org.json.JSONObject(response.body().toString()).optInt("id", 0)
+                        } catch (_: Exception) { 0 }
+                        mostrarDialogoPostAgendamiento(sesionId)
                         btnConfirmar.text = "Agendado ✓"
                     } else {
                         val msg = when (response.code()) {
@@ -153,5 +168,18 @@ class AgendarActivity : AppCompatActivity() {
         }
 
         findViewById<TextView>(R.id.tvVolverAgendar).setOnClickListener { finish() }
+    }
+
+    private fun mostrarDialogoPostAgendamiento(sesionId: Int) {
+        android.app.AlertDialog.Builder(this)
+            .setTitle("✅ Sesión agendada")
+            .setMessage("Tu sesión fue agendada. Espera la confirmación del tarotista antes de pagar.")
+            .setPositiveButton("Ir a mis sesiones") { _, _ ->
+                startActivity(android.content.Intent(this, MisSesionesActivity::class.java))
+                finish()
+            }
+            .setNegativeButton("Volver al inicio") { _, _ -> finish() }
+            .setCancelable(false)
+            .show()
     }
 }

@@ -10,15 +10,21 @@ import org.json.JSONObject
 
 class CompletarPerfilTarotistaActivity : AppCompatActivity() {
 
+    private val precios = listOf(5000, 8000, 10000, 12000, 15000, 18000, 20000, 25000, 30000, 35000, 40000, 45000)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_completar_perfil_tarotista)
 
         val etNombrePro = findViewById<EditText>(R.id.etCompNombrePro)
         val etDescripcion = findViewById<EditText>(R.id.etCompDescripcion)
-        val etPrecio = findViewById<EditText>(R.id.etCompPrecio)
+        val spinnerPrecio = findViewById<Spinner>(R.id.spinnerCompPrecio)
         val btnGuardar = findViewById<Button>(R.id.btnCompGuardar)
         val tvResultado = findViewById<TextView>(R.id.tvCompResultado)
+
+        val precioLabels = precios.map { "$ ${"%,d".format(it)} CLP" }
+        spinnerPrecio.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, precioLabels)
+        spinnerPrecio.setSelection(precios.indexOf(15000))
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
@@ -27,9 +33,8 @@ class CompletarPerfilTarotistaActivity : AppCompatActivity() {
         btnGuardar.setOnClickListener {
             val nombrePro = etNombrePro.text.toString().trim()
             val descripcion = etDescripcion.text.toString().trim()
-            val precioStr = etPrecio.text.toString().trim()
 
-            if (nombrePro.isEmpty() || descripcion.isEmpty() || precioStr.isEmpty()) {
+            if (nombrePro.isEmpty() || descripcion.isEmpty()) {
                 tvResultado.text = "Completa todos los campos"
                 tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
                 return@setOnClickListener
@@ -47,17 +52,7 @@ class CompletarPerfilTarotistaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val precio = precioStr.toDoubleOrNull() ?: run {
-                tvResultado.text = "Precio inválido — ingresa solo números"
-                tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
-                return@setOnClickListener
-            }
-
-            if (precio <= 0) {
-                tvResultado.text = "El precio debe ser mayor a 0"
-                tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
-                return@setOnClickListener
-            }
+            val precio = precios[spinnerPrecio.selectedItemPosition].toDouble()
 
             tvResultado.text = ""
             btnGuardar.isEnabled = false
@@ -75,7 +70,7 @@ class CompletarPerfilTarotistaActivity : AppCompatActivity() {
                             .putString("rol", "TAROTISTA")
                             .putString("nombreProfesional", nombrePro)
                             .putString("descripcion", descripcion)
-                            .putString("precioBase", precioStr)
+                            .putString("precioBase", precio.toInt().toString())
                             .apply()
                         startActivity(Intent(this@CompletarPerfilTarotistaActivity, DisponibilidadActivity::class.java).apply {
                             putExtra("isOnboarding", true)

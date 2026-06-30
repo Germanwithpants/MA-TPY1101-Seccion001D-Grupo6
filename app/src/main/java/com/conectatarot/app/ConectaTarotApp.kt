@@ -4,12 +4,17 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 
 class ConectaTarotApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
         instance = this
+        val modoOscuro = getSharedPreferences("conectatarot", MODE_PRIVATE).getBoolean("modo_oscuro", false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (modoOscuro) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
         createNotificationChannels()
     }
 

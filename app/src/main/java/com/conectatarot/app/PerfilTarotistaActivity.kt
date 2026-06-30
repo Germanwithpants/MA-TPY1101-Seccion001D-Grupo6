@@ -7,8 +7,11 @@ import androidx.lifecycle.lifecycleScope
 import com.conectatarot.app.network.EditarPerfilTarotistaRequest
 import com.conectatarot.app.network.RetrofitClient
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class PerfilTarotistaActivity : AppCompatActivity() {
+
+    private val precios = listOf(5000, 8000, 10000, 12000, 15000, 18000, 20000, 25000, 30000, 35000, 40000, 45000)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,34 +23,34 @@ class PerfilTarotistaActivity : AppCompatActivity() {
 
         val etNombrePro = findViewById<EditText>(R.id.etEditNombrePro)
         val etDescripcion = findViewById<EditText>(R.id.etEditDescripcion)
-        val etPrecio = findViewById<EditText>(R.id.etEditPrecio)
+        val spinnerPrecio = findViewById<Spinner>(R.id.spinnerEditPrecio)
         val btnGuardar = findViewById<Button>(R.id.btnGuardarPerfilTarotista)
         val tvResultado = findViewById<TextView>(R.id.tvResultadoPerfilTarotista)
         val tvVolver = findViewById<TextView>(R.id.tvVolverPerfilTarotista)
 
-        // Cargar datos guardados
+        val precioLabels = precios.map { "$ ${"%,d".format(it)} CLP" }
+        spinnerPrecio.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, precioLabels)
+            .also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+
         etNombrePro.setText(prefs.getString("nombreProfesional", "") ?: "")
         etDescripcion.setText(prefs.getString("descripcion", "") ?: "")
-        etPrecio.setText(prefs.getString("precioBase", "") ?: "")
+        val precioGuardado = prefs.getString("precioBase", "15000")?.toDoubleOrNull()?.toInt() ?: 15000
+        val idx = precios.indexOfFirst { it >= precioGuardado }.takeIf { it >= 0 } ?: 0
+        spinnerPrecio.setSelection(idx)
 
         tvVolver.setOnClickListener { finish() }
 
         btnGuardar.setOnClickListener {
             val nombrePro = etNombrePro.text.toString().trim()
             val descripcion = etDescripcion.text.toString().trim()
-            val precioStr = etPrecio.text.toString().trim()
 
-            if (nombrePro.isEmpty() || descripcion.isEmpty() || precioStr.isEmpty()) {
+            if (nombrePro.isEmpty() || descripcion.isEmpty()) {
                 tvResultado.text = "Por favor completa todos los campos"
                 tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
                 return@setOnClickListener
             }
 
-            val precio = precioStr.toDoubleOrNull() ?: run {
-                tvResultado.text = "El precio debe ser un número válido"
-                tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
-                return@setOnClickListener
-            }
+            val precio = precios[spinnerPrecio.selectedItemPosition].toDouble()
 
             btnGuardar.isEnabled = false
             btnGuardar.text = "Guardando..."
@@ -63,13 +66,16 @@ class PerfilTarotistaActivity : AppCompatActivity() {
                         prefs.edit()
                             .putString("nombreProfesional", nombrePro)
                             .putString("descripcion", descripcion)
-                            .putString("precioBase", precioStr)
+                            .putString("precioBase", precio.toInt().toString())
                             .apply()
                         tvResultado.text = "✅ Perfil actualizado correctamente"
                         tvResultado.setTextColor(getColor(android.R.color.holo_green_light))
                         btnGuardar.text = "Guardado ✓"
                     } else {
-                        tvResultado.text = "❌ Error al actualizar"
+                        val errorMsg = try {
+                            JSONObject(response.errorBody()?.string() ?: "").optString("message", "")
+                        } catch (_: Exception) { "" }
+                        tvResultado.text = "❌ ${errorMsg.ifBlank { "Error al actualizar (${response.code()})" }}"
                         tvResultado.setTextColor(getColor(android.R.color.holo_red_light))
                         btnGuardar.isEnabled = true
                         btnGuardar.text = "Guardar cambios"

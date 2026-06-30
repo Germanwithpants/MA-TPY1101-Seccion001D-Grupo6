@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.conectatarot.app.network.ResenaClienteRequest
 import com.conectatarot.app.network.RetrofitClient
+import com.conectatarot.app.network.SesionItem
 import kotlinx.coroutines.launch
 
 class TarotistaHomeActivity : AppCompatActivity() {
@@ -32,16 +34,13 @@ class TarotistaHomeActivity : AppCompatActivity() {
         progressAgenda = findViewById(R.id.progressAgenda)
         rvAgenda.layoutManager = LinearLayoutManager(this)
 
-        findViewById<TextView>(R.id.tvCerrarSesionTarotista).setOnClickListener {
-            prefs.edit().clear().apply()
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
+        val irSettings = View.OnClickListener { startActivity(Intent(this, SettingsActivity::class.java)) }
+        findViewById<TextView>(R.id.tvAjustesTarotista).setOnClickListener(irSettings)
+        findViewById<Button>(R.id.btnAjustesTarotista).setOnClickListener(irSettings)
 
         findViewById<Button>(R.id.btnEditarPerfilTarotista).setOnClickListener {
             startActivity(Intent(this, PerfilTarotistaActivity::class.java))
         }
-
         findViewById<Button>(R.id.btnDisponibilidad).setOnClickListener {
             startActivity(Intent(this, DisponibilidadActivity::class.java))
         }
@@ -59,7 +58,8 @@ class TarotistaHomeActivity : AppCompatActivity() {
                 val response = RetrofitClient.instance.getSesionesTarotista("Bearer $token")
                 progressAgenda.visibility = View.GONE
                 if (response.isSuccessful && response.body() != null) {
-                    val sesiones = response.body()!!.data?.content ?: emptyList()
+                    val sesiones = (response.body()!!.data?.content ?: emptyList())
+                        .sortedByDescending { it.fecha }
                     if (sesiones.isEmpty()) {
                         tvEmpty.visibility = View.VISIBLE
                     } else {
@@ -67,7 +67,8 @@ class TarotistaHomeActivity : AppCompatActivity() {
                         rvAgenda.adapter = AgendaAdapter(
                             sesiones,
                             onConfirmar = { sesion -> cambiarEstado(sesion.id, "confirmar") },
-                            onRechazar = { sesion -> cambiarEstado(sesion.id, "rechazar") }
+                            onRechazar  = { sesion -> cambiarEstado(sesion.id, "rechazar") },
+                            onCalificarCliente = { sesion -> mostrarDialogoCalificarCliente(sesion) }
                         )
                     }
                 } else {
@@ -91,8 +92,9 @@ class TarotistaHomeActivity : AppCompatActivity() {
                     RetrofitClient.instance.rechazarSesion("Bearer $token", id)
 
                 if (response.isSuccessful) {
-                    val msg = if (accion == "confirmar") "Sesión confirmada ✅" else "Sesión rechazada"
-                    Toast.makeText(this@TarotistaHomeActivity, msg, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TarotistaHomeActivity,
+                        if (accion == "confirmar") "Sesión confirmada ✅" else "Sesión rechazada",
+                        Toast.LENGTH_SHORT).show()
                     cargarSesiones()
                 } else {
                     Toast.makeText(this@TarotistaHomeActivity, "Error al actualizar (${response.code()})", Toast.LENGTH_SHORT).show()
@@ -101,5 +103,48 @@ class TarotistaHomeActivity : AppCompatActivity() {
                 Toast.makeText(this@TarotistaHomeActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun mostrarDialogoCalificarCliente(sesion: SesionItem) {
+        val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
+        val idTarotista = prefs.getInt("idUsuario", 0)
+
+        val ratingBar = RatingBar(this).apply { numStars = 5; stepSize = 1f; rating = 5f }
+        val etComentario = EditText(this).apply {
+            hint = "Comentario sobre el cliente (opcional)"
+            minLines = 2
+        }
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(40, 20, 40, 20)
+            addView(ratingBar)
+            addView(etComentario)
+        }
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle("⭐ Calificar a ${sesion.nombreCliente ?: "cliente"}")
+            .setView(layout)
+            .setPositiveButton("Enviar") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        val resp = RetrofitClient.instance.crearResenaCliente(
+                            "Bearer $token",
+                            ResenaClienteRequest(
+                                sesionId = sesion.id,
+                                tarotistaId = idTarotista,
+                                calificacion = ratingBar.rating.toInt(),
+                                comentario = etComentario.text.toString().trim()
+                            )
+                        )
+                        Toast.makeText(this@TarotistaHomeActivity,
+                            if (resp.isSuccessful) "Calificación enviada ✅" else "Error al enviar (${resp.code()})",
+                            Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this@TarotistaHomeActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 }

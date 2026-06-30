@@ -75,6 +75,43 @@
             android:paddingBottom="8dp"
             app:singleSelection="true"/>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardPendientesCalificar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:cardBackgroundColor="#2d1654"
+            app:cardCornerRadius="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvPendientesCalificar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="#f39c12"
+                    android:textSize="13sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:text="Ver →"
+                    android:textColor="#d4aaff"
+                    android:textSize="13sp"
+                    android:padding="4dp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
         <TextView
             android:text="Tarotistas disponibles"
             android:textColor="#e8c3ff"
@@ -84,15 +121,6 @@
             android:paddingBottom="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/tvLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Salir"
-            android:textColor="#e74c3c"
-            android:textSize="14sp"
-            android:padding="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTarotistas"

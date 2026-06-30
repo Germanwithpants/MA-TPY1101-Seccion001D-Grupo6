@@ -80,21 +80,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Precio por hora (CLP)"
+            android:text="Precio por sesión (CLP)"
             android:textColor="#e8c3ff"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
-        <EditText
-            android:id="@+id/etCompPrecio"
+        <Spinner
+            android:id="@+id/spinnerCompPrecio"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:hint="Ej: 15000"
-            android:textColor="#ffffff"
-            android:textColorHint="#9b59b6"
             android:background="#2d1654"
-            android:padding="16dp"
-            android:inputType="number"
+            android:paddingStart="12dp"
             android:layout_marginBottom="32dp"/>
 
         <Button

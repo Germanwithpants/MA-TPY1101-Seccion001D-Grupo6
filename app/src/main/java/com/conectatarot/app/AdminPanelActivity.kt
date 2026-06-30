@@ -70,7 +70,12 @@ class AdminPanelActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerViews() {
+        val miId = getSharedPreferences("conectatarot", MODE_PRIVATE).getInt("idUsuario", -1)
         usuariosAdapter = AdminUsuariosAdapter(emptyList()) { usuario ->
+            if (usuario.idUsuario == miId) {
+                Toast.makeText(this, "No puedes bloquearte a ti mismo", Toast.LENGTH_SHORT).show()
+                return@AdminUsuariosAdapter
+            }
             val activo = usuario.activo != false
             lifecycleScope.launch {
                 try {

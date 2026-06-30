@@ -30,7 +30,16 @@
             android:layout_height="wrap_content"
             android:textColor="#e8c3ff"
             android:textSize="14sp"
-            android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/tvAgendaFechaCreacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#9b59b6"
+            android:textSize="12sp"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,6 +112,17 @@
             android:backgroundTint="#3498db"
             android:textSize="13sp"
             android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnCalificarCliente"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="⭐ Calificar cliente"
+            android:textColor="#ffffff"
+            android:backgroundTint="#f39c12"
+            android:textSize="13sp"
+            android:layout_marginTop="6dp"
             android:visibility="gone"/>
 
     </LinearLayout>

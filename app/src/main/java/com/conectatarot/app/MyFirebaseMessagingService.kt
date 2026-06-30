@@ -38,11 +38,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
+        val prefs = getSharedPreferences("conectatarot", Context.MODE_PRIVATE)
+        if (!prefs.getBoolean("notificaciones_activas", true)) return
+
         val title = message.notification?.title ?: message.data["title"] ?: "ConectaTarot"
         val body = message.notification?.body ?: message.data["body"] ?: ""
         val tipo = message.data["tipo"]
 
-        val prefs = getSharedPreferences("conectatarot", Context.MODE_PRIVATE)
         val rol = prefs.getString("rol", "CLIENTE")
 
         val destClass = when {

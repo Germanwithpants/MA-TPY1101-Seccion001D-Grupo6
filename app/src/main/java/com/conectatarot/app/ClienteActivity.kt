@@ -4,13 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.conectatarot.app.network.RetrofitClient
+import com.conectatarot.app.network.SesionItem
 import com.conectatarot.app.network.Tarotista
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
@@ -35,13 +38,6 @@ class ClienteActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.tvBienvenido).text = "Hola, $nombre 👋"
 
-        findViewById<TextView>(R.id.tvLogout).setOnClickListener {
-            com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
-            getSharedPreferences("conectatarot", MODE_PRIVATE).edit().clear().apply()
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
-
         rv = findViewById(R.id.rvTarotistas)
         rv.layoutManager = LinearLayoutManager(this)
         etBuscar = findViewById(R.id.etBuscar)
@@ -60,19 +56,55 @@ class ClienteActivity : AppCompatActivity() {
         }
 
         cargarTarotistas(null)
+        cargarPendientesCalificar()
 
         etBuscar.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                aplicarFiltroLocal(s.toString())
-            }
+            override fun afterTextChanged(s: Editable?) { aplicarFiltroLocal(s.toString()) }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        cargarPendientesCalificar()
+    }
+
+    private fun cargarPendientesCalificar() {
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.instance.getMisSesiones("Bearer $token")
+                if (response.isSuccessful) {
+                    val sesiones = response.body()?.data ?: emptyList()
+                    val pendientes = sesiones.filter { esSesionCompletadaSinCalificar(it) }
+                    val card = findViewById<CardView>(R.id.cardPendientesCalificar)
+                    val tv = findViewById<TextView>(R.id.tvPendientesCalificar)
+                    if (pendientes.isNotEmpty()) {
+                        tv.text = "⭐ Tienes ${pendientes.size} sesión${if (pendientes.size > 1) "es" else ""} por calificar"
+                        card.visibility = View.VISIBLE
+                        card.setOnClickListener {
+                            startActivity(Intent(this@ClienteActivity, MisSesionesActivity::class.java))
+                        }
+                    } else {
+                        card.visibility = View.GONE
+                    }
+                }
+            } catch (_: Exception) {}
+        }
+    }
+
+    private fun esSesionCompletadaSinCalificar(s: SesionItem): Boolean {
+        val completada = s.estado == "COMPLETADA" || (s.estado == "CONFIRMADA" && run {
+            try {
+                val fin = java.time.LocalDateTime.parse(s.fecha).plusMinutes(s.duracionMinutos.toLong())
+                fin.isBefore(java.time.LocalDateTime.now())
+            } catch (e: Exception) { false }
+        })
+        return completada && s.estadoPago == "PAGADO"
+    }
+
     private fun setupFiltros() {
         val chipGroup = findViewById<ChipGroup>(R.id.chipGroupFiltros)
-
         val categorias = listOf("Todos", "Predictivo", "Terapéutico", "Holístico", "Negocios", "Amor")
         categorias.forEachIndexed { index, label ->
             val chip = Chip(this).apply {
@@ -92,7 +124,6 @@ class ClienteActivity : AppCompatActivity() {
             if (checkedIds.isEmpty()) return@setOnCheckedStateChangeListener
             val chip = group.findViewById<Chip>(checkedIds[0])
             val label = chip?.text?.toString() ?: "Todos"
-
             for (i in 0 until group.childCount) {
                 val c = group.getChildAt(i) as? Chip ?: continue
                 c.chipBackgroundColor = android.content.res.ColorStateList.valueOf(
@@ -100,7 +131,6 @@ class ClienteActivity : AppCompatActivity() {
                     else android.graphics.Color.parseColor("#2d1654")
                 )
             }
-
             filtroEspecialidad = if (label == "Todos") null else label
             cargarTarotistas(filtroEspecialidad)
         }

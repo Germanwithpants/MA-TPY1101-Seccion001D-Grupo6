@@ -107,7 +107,7 @@ class SesionAdapter(
 
         holder.btnCancelar.isEnabled = true
         when {
-            s.estado == "PENDIENTE" && s.estadoPago != "PAGADO" -> {
+            s.estado == "PENDIENTE" && s.estadoPago != "PAGADO" && !sesionCompletada(s) -> {
                 holder.btnCancelar.visibility = View.VISIBLE
                 holder.btnCancelar.text = "Cancelar sesión"
                 holder.btnCancelar.setBackgroundColor(android.graphics.Color.parseColor("#e74c3c"))
