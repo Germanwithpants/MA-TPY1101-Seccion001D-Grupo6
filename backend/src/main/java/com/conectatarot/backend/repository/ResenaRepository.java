@@ -9,6 +9,8 @@ import java.util.List;
 public interface ResenaRepository extends JpaRepository<Resena, Integer> {
     List<Resena> findByTarotistaId(Integer tarotistaId);
 
+    boolean existsBySesionIdAndUsuarioId(Integer sesionId, Integer usuarioId);
+
     @Query("SELECT AVG(r.calificacion) FROM Resena r WHERE r.tarotistaId = :tarotistaId")
     Double promedioByTarotistaId(Integer tarotistaId);
 }

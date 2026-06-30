@@ -24,6 +24,8 @@ public class Resena {
 
     private String comentario;
 
+    private String tags;
+
     private LocalDateTime fecha;
 
     public Integer getId() { return id; }
@@ -38,6 +40,8 @@ public class Resena {
     public void setCalificacion(Integer calificacion) { this.calificacion = calificacion; }
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }
+    public String getTags() { return tags; }
+    public void setTags(String tags) { this.tags = tags; }
     public LocalDateTime getFecha() { return fecha; }
     public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
 }
