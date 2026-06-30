@@ -9,52 +9,76 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.conectatarot.app.network.SesionItem
 
+sealed class AgendaListItem {
+    data class Header(val titulo: String) : AgendaListItem()
+    data class Item(val sesion: SesionItem) : AgendaListItem()
+}
+
 class AgendaAdapter(
-    private val sesiones: List<SesionItem>,
+    private val items: List<AgendaListItem>,
     private val onConfirmar: (SesionItem) -> Unit,
     private val onRechazar: (SesionItem) -> Unit,
     private val onCalificarCliente: ((SesionItem) -> Unit)? = null
-) : RecyclerView.Adapter<AgendaAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvCliente: TextView = view.findViewById(R.id.tvAgendaCliente)
-        val tvFecha: TextView = view.findViewById(R.id.tvAgendaFecha)
+    companion object {
+        private const val TYPE_HEADER = 0
+        private const val TYPE_ITEM   = 1
+    }
+
+    class HeaderVH(view: View) : RecyclerView.ViewHolder(view) {
+        val tv: TextView = view as TextView
+    }
+
+    class ItemVH(view: View) : RecyclerView.ViewHolder(view) {
+        val tvCliente: TextView       = view.findViewById(R.id.tvAgendaCliente)
+        val tvFecha: TextView         = view.findViewById(R.id.tvAgendaFecha)
         val tvFechaCreacion: TextView = view.findViewById(R.id.tvAgendaFechaCreacion)
-        val tvEstado: TextView = view.findViewById(R.id.tvAgendaEstado)
-        val tvPrecio: TextView = view.findViewById(R.id.tvAgendaPrecio)
-        val tvPago: TextView = view.findViewById(R.id.tvAgendaPago)
-        val btnConfirmar: Button = view.findViewById(R.id.btnConfirmarAgenda)
-        val btnRechazar: Button = view.findViewById(R.id.btnRechazarAgenda)
-        val btnVideollamada: Button = view.findViewById(R.id.btnVideollamadaAgenda)
+        val tvEstado: TextView        = view.findViewById(R.id.tvAgendaEstado)
+        val tvPrecio: TextView        = view.findViewById(R.id.tvAgendaPrecio)
+        val tvPago: TextView          = view.findViewById(R.id.tvAgendaPago)
+        val btnConfirmar: Button      = view.findViewById(R.id.btnConfirmarAgenda)
+        val btnRechazar: Button       = view.findViewById(R.id.btnRechazarAgenda)
+        val btnVideollamada: Button   = view.findViewById(R.id.btnVideollamadaAgenda)
         val btnCalificarCliente: Button = view.findViewById(R.id.btnCalificarCliente)
     }
 
-    private fun esPasada(s: SesionItem): Boolean {
-        return try {
-            val fin = java.time.LocalDateTime.parse(s.fecha).plusMinutes(s.duracionMinutos.toLong())
-            fin.isBefore(java.time.LocalDateTime.now())
-        } catch (e: Exception) { false }
+    override fun getItemViewType(position: Int) =
+        if (items[position] is AgendaListItem.Header) TYPE_HEADER else TYPE_ITEM
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        if (viewType == TYPE_HEADER)
+            HeaderVH(LayoutInflater.from(parent.context).inflate(R.layout.item_sesion_header, parent, false))
+        else
+            ItemVH(LayoutInflater.from(parent.context).inflate(R.layout.item_agenda, parent, false))
+
+    override fun getItemCount() = items.size
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = items[position]) {
+            is AgendaListItem.Header -> (holder as HeaderVH).tv.text = item.titulo
+            is AgendaListItem.Item   -> bindItem(holder as ItemVH, item.sesion)
+        }
     }
+
+    private fun esPasada(s: SesionItem): Boolean = try {
+        val fin = java.time.LocalDateTime.parse(s.fecha).plusMinutes(s.duracionMinutos.toLong())
+        fin.isBefore(java.time.LocalDateTime.now())
+    } catch (e: Exception) { false }
 
     private fun enVentanaLlamada(s: SesionItem): Boolean {
         if (s.estado != "CONFIRMADA" || s.estadoPago != "PAGADO") return false
         return try {
-            val fecha = java.time.LocalDateTime.parse(s.fecha)
-            val ahora = java.time.LocalDateTime.now()
-            ahora.isAfter(fecha.minusMinutes(15)) && ahora.isBefore(fecha.plusMinutes(s.duracionMinutos.toLong()))
+            val inicio = java.time.LocalDateTime.parse(s.fecha)
+            val ahora  = java.time.LocalDateTime.now()
+            ahora.isAfter(inicio.minusMinutes(15)) && ahora.isBefore(inicio.plusMinutes(s.duracionMinutos.toLong()))
         } catch (e: Exception) { false }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_agenda, parent, false))
-
-    override fun getItemCount() = sesiones.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val s = sesiones[position]
+    private fun bindItem(holder: ItemVH, s: SesionItem) {
         holder.tvCliente.text = "👤 ${s.nombreCliente ?: "Cliente"}"
-        holder.tvFecha.text = "📅 Sesión: ${s.fecha.take(16).replace("T", " ")}"
-        holder.tvPrecio.text = "$ ${s.precioTotal.toInt()}"
+        holder.tvFecha.text   = "📅 Sesión: ${s.fecha.take(16).replace("T", " ")}"
+        holder.tvPrecio.text  = "$ ${s.precioTotal.toInt()}"
 
         if (!s.fechaCreacion.isNullOrBlank()) {
             holder.tvFechaCreacion.text = "📋 Agendada: ${s.fechaCreacion.take(16).replace("T", " ")}"
@@ -69,27 +93,35 @@ class AgendaAdapter(
             s.estado == "CONFIRMADA" -> "#27ae60" to "✅ Confirmada"
             s.estado == "CANCELADA"  -> "#e74c3c" to "❌ Cancelada"
             s.estado == "RECHAZADA"  -> "#95a5a6" to "🚫 Rechazada"
-            else -> "#9b59b6" to s.estado
+            else                     -> "#9b59b6" to s.estado
         }
         holder.tvEstado.text = texto
         holder.tvEstado.setTextColor(android.graphics.Color.parseColor(color))
 
-        val (pagoColor, pagoTexto) = when (s.estadoPago) {
-            "PAGADO"    -> "#27ae60" to "💰 Pagado"
-            "RECHAZADO" -> "#e74c3c" to "❌ Pago rechazado"
-            else        -> "#f39c12" to "⏳ Pago pendiente"
+        // Only show payment status for active sessions — not for rejected/cancelled
+        val estadoFinal = s.estado in listOf("RECHAZADA", "CANCELADA") || (esPasada(s) && s.estado == "COMPLETADA")
+        if (estadoFinal) {
+            holder.tvPago.visibility = View.GONE
+        } else {
+            holder.tvPago.visibility = View.VISIBLE
+            val (pagoColor, pagoTexto) = when (s.estadoPago) {
+                "PAGADO"    -> "#27ae60" to "💰 Pagado"
+                "RECHAZADO" -> "#e74c3c" to "❌ Pago rechazado"
+                else        -> "#f39c12" to "⏳ Pago pendiente"
+            }
+            holder.tvPago.text = pagoTexto
+            holder.tvPago.setTextColor(android.graphics.Color.parseColor(pagoColor))
         }
-        holder.tvPago.text = pagoTexto
-        holder.tvPago.setTextColor(android.graphics.Color.parseColor(pagoColor))
 
+        // Confirm / reject buttons only for pending non-past sessions
         if (s.estado == "PENDIENTE" && !esPasada(s)) {
             holder.btnConfirmar.visibility = View.VISIBLE
-            holder.btnRechazar.visibility = View.VISIBLE
+            holder.btnRechazar.visibility  = View.VISIBLE
             holder.btnConfirmar.setOnClickListener { onConfirmar(s) }
-            holder.btnRechazar.setOnClickListener { onRechazar(s) }
+            holder.btnRechazar.setOnClickListener  { onRechazar(s) }
         } else {
             holder.btnConfirmar.visibility = View.GONE
-            holder.btnRechazar.visibility = View.GONE
+            holder.btnRechazar.visibility  = View.GONE
         }
 
         if (enVentanaLlamada(s)) {

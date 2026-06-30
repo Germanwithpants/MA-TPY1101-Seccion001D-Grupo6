@@ -65,7 +65,7 @@ class TarotistaHomeActivity : AppCompatActivity() {
                     } else {
                         rvAgenda.visibility = View.VISIBLE
                         rvAgenda.adapter = AgendaAdapter(
-                            sesiones,
+                            buildSectionedList(sesiones),
                             onConfirmar = { sesion -> cambiarEstado(sesion.id, "confirmar") },
                             onRechazar  = { sesion -> cambiarEstado(sesion.id, "rechazar") },
                             onCalificarCliente = { sesion -> mostrarDialogoCalificarCliente(sesion) }
@@ -79,6 +79,30 @@ class TarotistaHomeActivity : AppCompatActivity() {
                 progressAgenda.visibility = View.GONE
                 tvEmpty.visibility = View.VISIBLE
                 Toast.makeText(this@TarotistaHomeActivity, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun esPasada(s: com.conectatarot.app.network.SesionItem): Boolean = try {
+        val fin = java.time.LocalDateTime.parse(s.fecha).plusMinutes(s.duracionMinutos.toLong())
+        fin.isBefore(java.time.LocalDateTime.now())
+    } catch (e: Exception) { false }
+
+    private fun buildSectionedList(sesiones: List<SesionItem>): List<AgendaListItem> {
+        val pendientes = sesiones.filter {
+            !esPasada(it) && it.estado in listOf("PENDIENTE", "CONFIRMADA")
+        }
+        val historial = sesiones.filter {
+            esPasada(it) || it.estado in listOf("RECHAZADA", "CANCELADA", "COMPLETADA")
+        }
+        return buildList {
+            if (pendientes.isNotEmpty()) {
+                add(AgendaListItem.Header("SESIONES ACTIVAS"))
+                pendientes.forEach { add(AgendaListItem.Item(it)) }
+            }
+            if (historial.isNotEmpty()) {
+                add(AgendaListItem.Header("HISTORIAL"))
+                historial.forEach { add(AgendaListItem.Item(it)) }
             }
         }
     }
