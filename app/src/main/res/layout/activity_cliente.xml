@@ -104,6 +104,8 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Ver →"
                     android:textColor="#d4aaff"
                     android:textSize="13sp"
