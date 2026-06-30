@@ -16,6 +16,7 @@ class TarotistaAdapter(private val tarotistas: List<Tarotista>) :
         val tvDescripcion: TextView = view.findViewById(R.id.tvDescripcion)
         val tvPrecio: TextView = view.findViewById(R.id.tvPrecio)
         val tvEspecialidades: TextView = view.findViewById(R.id.tvEspecialidades)
+        val tvPromedio: TextView = view.findViewById(R.id.tvPromedio)
         val btnVerPerfil: Button = view.findViewById(R.id.btnVerPerfil)
     }
 
@@ -31,6 +32,14 @@ class TarotistaAdapter(private val tarotistas: List<Tarotista>) :
         holder.tvDescripcion.text = t.descripcion ?: "Sin descripción"
         holder.tvPrecio.text = "$ ${t.precioBase?.toInt() ?: 0}"
         holder.tvEspecialidades.text = t.especialidades?.joinToString(" • ") ?: ""
+
+        if (t.promedio != null && (t.totalResenas ?: 0) > 0) {
+            val estrellas = "★".repeat(t.promedio.toInt()) + "☆".repeat(5 - t.promedio.toInt())
+            holder.tvPromedio.text = "$estrellas ${t.promedio} (${t.totalResenas})"
+            holder.tvPromedio.visibility = View.VISIBLE
+        } else {
+            holder.tvPromedio.visibility = View.GONE
+        }
 
         holder.btnVerPerfil.setOnClickListener {
             val context = holder.itemView.context

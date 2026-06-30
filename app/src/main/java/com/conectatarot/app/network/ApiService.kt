@@ -32,7 +32,10 @@ interface ApiService {
 
     // Tarotistas
     @GET("api/tarotistas")
-    suspend fun getTarotistas(@Header("Authorization") token: String): Response<TarotistasResponse>
+    suspend fun getTarotistas(
+        @Header("Authorization") token: String,
+        @Query("especialidad") especialidad: String? = null
+    ): Response<TarotistasResponse>
 
     @POST("api/tarotistas")
     suspend fun registrarTarotista(@Body request: RegistroTarotistaRequest): Response<RegistroResponse>
@@ -235,7 +238,9 @@ data class Tarotista(
     val descripcion: String?,
     val precioBase: Double?,
     val estado: String?,
-    val especialidades: List<String>?
+    val especialidades: List<String>?,
+    val promedio: Double? = null,
+    val totalResenas: Int? = null
 )
 
 data class TarotistasResponse(val success: Boolean, val message: String, val data: List<Tarotista>?)

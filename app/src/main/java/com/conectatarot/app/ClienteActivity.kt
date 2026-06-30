@@ -13,18 +13,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.conectatarot.app.network.RetrofitClient
 import com.conectatarot.app.network.Tarotista
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.launch
 
 class ClienteActivity : AppCompatActivity() {
 
     private var todosLosTarotistas = listOf<Tarotista>()
+    private var filtroEspecialidad: String? = null
+    private lateinit var token: String
+    private lateinit var rv: RecyclerView
+    private lateinit var etBuscar: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cliente)
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
-        val token = prefs.getString("token", "") ?: ""
+        token = prefs.getString("token", "") ?: ""
         val nombre = prefs.getString("nombre", "Cliente") ?: "Cliente"
 
         findViewById<TextView>(R.id.tvBienvenido).text = "Hola, $nombre 👋"
@@ -36,56 +42,90 @@ class ClienteActivity : AppCompatActivity() {
             finish()
         }
 
-        val rv = findViewById<RecyclerView>(R.id.rvTarotistas)
+        rv = findViewById(R.id.rvTarotistas)
         rv.layoutManager = LinearLayoutManager(this)
+        etBuscar = findViewById(R.id.etBuscar)
 
-        val etBuscar = findViewById<EditText>(R.id.etBuscar)
+        setupFiltros()
 
-        // Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.nav_inicio
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_sesiones -> {
-                    startActivity(Intent(this, MisSesionesActivity::class.java))
-                    false
-                }
-                R.id.nav_perfil -> {
-                    startActivity(Intent(this, PerfilActivity::class.java))
-                    false
-                }
-                R.id.nav_ajustes -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    false
-                }
+                R.id.nav_sesiones -> { startActivity(Intent(this, MisSesionesActivity::class.java)); false }
+                R.id.nav_perfil   -> { startActivity(Intent(this, PerfilActivity::class.java)); false }
+                R.id.nav_ajustes  -> { startActivity(Intent(this, SettingsActivity::class.java)); false }
                 else -> true
             }
         }
 
-        lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.instance.getTarotistas("Bearer $token")
-                if (response.isSuccessful && response.body() != null) {
-                    todosLosTarotistas = response.body()!!.data ?: emptyList()
-                    rv.adapter = TarotistaAdapter(todosLosTarotistas)
-                }
-            } catch (e: Exception) {
-                // error silencioso
-            }
-        }
+        cargarTarotistas(null)
 
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val query = s.toString().lowercase()
-                val filtrados = todosLosTarotistas.filter {
-                    it.nombreProfesional.lowercase().contains(query) ||
-                            (it.descripcion?.lowercase()?.contains(query) == true) ||
-                            (it.especialidades?.any { esp -> esp.lowercase().contains(query) } == true)
-                }
-                rv.adapter = TarotistaAdapter(filtrados)
+                aplicarFiltroLocal(s.toString())
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+    }
+
+    private fun setupFiltros() {
+        val chipGroup = findViewById<ChipGroup>(R.id.chipGroupFiltros)
+
+        val categorias = listOf("Todos", "Predictivo", "Terapéutico", "Holístico", "Negocios", "Amor")
+        categorias.forEachIndexed { index, label ->
+            val chip = Chip(this).apply {
+                text = label
+                isCheckable = true
+                isChecked = index == 0
+                setTextColor(getColor(android.R.color.white))
+                chipBackgroundColor = android.content.res.ColorStateList.valueOf(
+                    if (index == 0) android.graphics.Color.parseColor("#7d3cae")
+                    else android.graphics.Color.parseColor("#2d1654")
+                )
+            }
+            chipGroup.addView(chip)
+        }
+
+        chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            if (checkedIds.isEmpty()) return@setOnCheckedStateChangeListener
+            val chip = group.findViewById<Chip>(checkedIds[0])
+            val label = chip?.text?.toString() ?: "Todos"
+
+            for (i in 0 until group.childCount) {
+                val c = group.getChildAt(i) as? Chip ?: continue
+                c.chipBackgroundColor = android.content.res.ColorStateList.valueOf(
+                    if (c.isChecked) android.graphics.Color.parseColor("#7d3cae")
+                    else android.graphics.Color.parseColor("#2d1654")
+                )
+            }
+
+            filtroEspecialidad = if (label == "Todos") null else label
+            cargarTarotistas(filtroEspecialidad)
+        }
+    }
+
+    private fun cargarTarotistas(especialidad: String?) {
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.instance.getTarotistas("Bearer $token", especialidad)
+                if (response.isSuccessful && response.body() != null) {
+                    todosLosTarotistas = response.body()!!.data ?: emptyList()
+                    aplicarFiltroLocal(etBuscar.text.toString())
+                }
+            } catch (_: Exception) {}
+        }
+    }
+
+    private fun aplicarFiltroLocal(query: String) {
+        val q = query.lowercase()
+        val filtrados = if (q.isBlank()) todosLosTarotistas
+        else todosLosTarotistas.filter {
+            it.nombreProfesional.lowercase().contains(q) ||
+            (it.descripcion?.lowercase()?.contains(q) == true) ||
+            (it.especialidades?.any { esp -> esp.lowercase().contains(q) } == true)
+        }
+        rv.adapter = TarotistaAdapter(filtrados)
     }
 }
