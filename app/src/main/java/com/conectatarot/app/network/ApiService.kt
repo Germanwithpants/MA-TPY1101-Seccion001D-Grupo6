@@ -41,7 +41,8 @@ interface ApiService {
     @GET("api/tarotistas")
     suspend fun getTarotistas(
         @Header("Authorization") token: String,
-        @Query("especialidad") especialidad: String? = null
+        @Query("especialidad") especialidad: String? = null,
+        @Query("usuarioId") usuarioId: Int? = null
     ): Response<TarotistasResponse>
 
     @POST("api/tarotistas")
@@ -50,12 +51,6 @@ interface ApiService {
     @GET("api/tarotistas/me")
     suspend fun getMiPerfilTarotista(
         @Header("Authorization") token: String
-    ): Response<TarotistaResponse>
-
-    @GET("api/tarotistas/usuario/{usuarioId}")
-    suspend fun getTarotistaByUsuario(
-        @Header("Authorization") token: String,
-        @Path("usuarioId") usuarioId: Int
     ): Response<TarotistaResponse>
 
     @PUT("api/tarotistas/{id}/perfil")

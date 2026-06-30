@@ -19,12 +19,12 @@ object TarotistaUtils {
             if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
         } catch (_: Exception) {}
 
-        // 2. Direct lookup by usuarioId
+        // 2. Filter public list by usuarioId (GET /api/tarotistas?usuarioId=X)
         if (idUsuario != 0) {
             try {
                 val id = RetrofitClient.instance
-                    .getTarotistaByUsuario("Bearer $token", idUsuario)
-                    .body()?.data?.id ?: 0
+                    .getTarotistas("Bearer $token", usuarioId = idUsuario)
+                    .body()?.data?.firstOrNull()?.id ?: 0
                 if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
             } catch (_: Exception) {}
         }
@@ -37,7 +37,7 @@ object TarotistaUtils {
             if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
         } catch (_: Exception) {}
 
-        // 3. Match by nombreProfesional in the public tarotistas list
+        // 4. Match by nombreProfesional in the public tarotistas list
         val nombrePro = prefs.getString("nombreProfesional", "") ?: ""
         if (nombrePro.isNotBlank()) {
             try {
