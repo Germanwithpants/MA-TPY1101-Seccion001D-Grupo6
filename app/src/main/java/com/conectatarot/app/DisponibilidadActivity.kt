@@ -32,8 +32,6 @@ class DisponibilidadActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
-        val tarotistaId = prefs.getInt("idTarotista", 0).takeIf { it != 0 }
-            ?: prefs.getInt("idUsuario", 0)
 
         val spinnerDia = findViewById<Spinner>(R.id.spinnerDia)
         val etHoraInicio = findViewById<EditText>(R.id.etHoraInicio)
@@ -70,9 +68,12 @@ class DisponibilidadActivity : AppCompatActivity() {
 
         rvDisponibilidad.layoutManager = LinearLayoutManager(this)
 
+        var tarotistaId = 0
+
         fun cargar() {
             progressDisp.visibility = View.VISIBLE
             lifecycleScope.launch {
+                if (tarotistaId == 0) tarotistaId = TarotistaUtils.resolverIdTarotista(token, prefs)
                 try {
                     val resp = RetrofitClient.instance.getDisponibilidad("Bearer $token", tarotistaId)
                     val lista = resp.body()?.data ?: emptyList()
@@ -115,6 +116,7 @@ class DisponibilidadActivity : AppCompatActivity() {
             val dia = DIAS[spinnerDia.selectedItemPosition]
             btnAgregar.isEnabled = false
             lifecycleScope.launch {
+                if (tarotistaId == 0) tarotistaId = TarotistaUtils.resolverIdTarotista(token, prefs)
                 try {
                     val resp = RetrofitClient.instance.addDisponibilidad(
                         "Bearer $token", tarotistaId,

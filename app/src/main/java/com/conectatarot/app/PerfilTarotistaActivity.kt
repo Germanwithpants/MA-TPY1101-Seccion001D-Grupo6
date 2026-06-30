@@ -99,29 +99,6 @@ class PerfilTarotistaActivity : AppCompatActivity() {
         }
     }
 
-    // Returns the real tarotista row ID, caching it in prefs after first lookup.
-    // Tries: 1) cached value, 2) sessions endpoint, 3) tarotistas list by nombreProfesional.
-    private suspend fun resolverIdTarotista(token: String, prefs: android.content.SharedPreferences): Int {
-        val cached = prefs.getInt("idTarotista", 0)
-        if (cached != 0) return cached
-
-        // Try sessions — each session carries the tarotistaId
-        try {
-            val resp = RetrofitClient.instance.getSesionesTarotista("Bearer $token")
-            val id = resp.body()?.data?.content?.firstOrNull()?.tarotistaId ?: 0
-            if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
-        } catch (_: Exception) {}
-
-        // Fallback: match by stored nombreProfesional in the public tarotistas list
-        val nombrePro = prefs.getString("nombreProfesional", "") ?: ""
-        if (nombrePro.isNotBlank()) {
-            try {
-                val resp = RetrofitClient.instance.getTarotistas("Bearer $token")
-                val id = resp.body()?.data?.firstOrNull { it.nombreProfesional == nombrePro }?.id ?: 0
-                if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
-            } catch (_: Exception) {}
-        }
-
-        return 0
-    }
+    private suspend fun resolverIdTarotista(token: String, prefs: android.content.SharedPreferences): Int =
+        TarotistaUtils.resolverIdTarotista(token, prefs)
 }

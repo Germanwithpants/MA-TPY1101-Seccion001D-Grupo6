@@ -44,6 +44,11 @@ class TarotistaHomeActivity : AppCompatActivity() {
             startActivity(Intent(this, DisponibilidadActivity::class.java))
         }
 
+        // Resolve and cache idTarotista early so all subsequent calls use the correct ID
+        lifecycleScope.launch {
+            val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
+            TarotistaUtils.resolverIdTarotista(token, prefs)
+        }
         cargarSesiones()
         cargarVerificacion()
         cargarMetricas()
