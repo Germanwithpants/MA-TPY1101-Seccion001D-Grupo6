@@ -3,6 +3,7 @@ package com.conectatarot.backend.service;
 import com.conectatarot.backend.dto.TarotistaResponseDTO;
 import com.conectatarot.backend.entity.Tarotista;
 import com.conectatarot.backend.entity.Usuario;
+import com.conectatarot.backend.repository.ResenaRepository;
 import com.conectatarot.backend.repository.TarotistaRepository;
 import com.conectatarot.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class TarotistaService {
 
     private final TarotistaRepository tarotistaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final ResenaRepository resenaRepository;
 
     public Tarotista crearTarotista(Integer usuarioId, String nombreProfesional) {
 
@@ -84,6 +86,8 @@ public class TarotistaService {
     }
 
     private TarotistaResponseDTO convertirADTO(Tarotista tarotista) {
+        Double promedio = resenaRepository.promedioByTarotistaId(tarotista.getId());
+        long total = resenaRepository.findByTarotistaId(tarotista.getId()).size();
         return TarotistaResponseDTO.builder()
                 .id(tarotista.getId())
                 .nombreProfesional(tarotista.getNombreProfesional())
@@ -96,6 +100,8 @@ public class TarotistaService {
                                 .map(relacion -> relacion.getEspecialidad().getNombre())
                                 .toList()
                 )
+                .promedio(promedio != null ? Math.round(promedio * 10.0) / 10.0 : null)
+                .totalResenas((int) total)
                 .build();
     }
 }
