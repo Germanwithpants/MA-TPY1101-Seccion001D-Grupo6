@@ -76,7 +76,7 @@ class TarotistaHomeActivity : AppCompatActivity() {
                         findViewById<android.widget.LinearLayout>(R.id.layoutMetricas).visibility = View.VISIBLE
                     }
                     if (sesiones.isEmpty()) {
-                        tvEmpty.visibility = View.VISIBLE
+                        mostrarEmptyState()
                     } else {
                         rvAgenda.visibility = View.VISIBLE
                         rvAgenda.adapter = AgendaAdapter(
@@ -154,6 +154,30 @@ class TarotistaHomeActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(this@TarotistaHomeActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun mostrarEmptyState() {
+        val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
+        val tarotistaId = prefs.getInt("idTarotista", 0)
+        val tvSubtitulo = findViewById<TextView>(R.id.tvEmptySubtitulo)
+        val tvIrHorarios = findViewById<View>(R.id.tvEmptyIrHorarios)
+        tvEmpty.visibility = View.VISIBLE
+
+        if (tarotistaId == 0) return
+
+        lifecycleScope.launch {
+            try {
+                val resp = RetrofitClient.instance.getDisponibilidad("Bearer $token", tarotistaId)
+                val tieneHorarios = (resp.body()?.data?.size ?: 0) > 0
+                if (tieneHorarios) {
+                    tvSubtitulo.text = "Tus horarios están configurados. ¡Espera a que un cliente te agende!"
+                    tvIrHorarios.visibility = View.GONE
+                } else {
+                    tvSubtitulo.text = "Configura tus horarios disponibles para que los clientes puedan agendarte."
+                    tvIrHorarios.visibility = View.VISIBLE
+                }
+            } catch (_: Exception) {}
         }
     }
 
