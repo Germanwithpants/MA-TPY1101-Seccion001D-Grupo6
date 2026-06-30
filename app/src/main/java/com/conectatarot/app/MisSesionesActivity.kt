@@ -126,45 +126,90 @@ class MisSesionesActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         val idUsuario = prefs.getInt("idUsuario", 0)
 
-        val ratingBar = RatingBar(this).apply { numStars = 5; stepSize = 1f; rating = 5f }
-        val etComentario = EditText(this).apply { hint = "Comentario (opcional)" }
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(40, 20, 40, 20)
-            addView(ratingBar)
-            addView(etComentario)
-        }
+        lifecycleScope.launch {
+            try {
+                val existe = RetrofitClient.instance.existeResena("Bearer $token", sesion.id)
+                if (existe.isSuccessful && existe.body()?.existe == true) {
+                    Toast.makeText(this@MisSesionesActivity, "Ya calificaste esta sesión", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+            } catch (_: Exception) {}
 
-        android.app.AlertDialog.Builder(this)
-            .setTitle("⭐ Califica a ${sesion.nombreTarotista}")
-            .setView(layout)
-            .setPositiveButton("Enviar") { _, _ ->
-                lifecycleScope.launch {
-                    try {
-                        val tarotistaId = if (sesion.tarotistaId != null && sesion.tarotistaId > 0) {
-                            sesion.tarotistaId
-                        } else {
-                            val resp = RetrofitClient.instance.getTarotistas("Bearer $token")
-                            resp.body()?.data?.find { it.nombreProfesional == sesion.nombreTarotista }?.id ?: 0
-                        }
-                        val response = RetrofitClient.instance.crearResena(
-                            ResenaRequest(
-                                sesionId = sesion.id,
-                                tarotistaId = tarotistaId,
-                                usuarioId = idUsuario,
-                                calificacion = ratingBar.rating.toInt(),
-                                comentario = etComentario.text.toString().trim()
-                            )
-                        )
-                        val msg = if (response.isSuccessful) "¡Gracias por tu calificación!" else "Error al enviar"
-                        Toast.makeText(this@MisSesionesActivity, msg, Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(this@MisSesionesActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
-                    }
+            val tagLabels = listOf("Empático", "Predictivo", "Terapéutico", "Directo", "Holístico")
+            val tagChecked = BooleanArray(tagLabels.size) { false }
+
+            val ratingBar = RatingBar(this@MisSesionesActivity).apply { numStars = 5; stepSize = 1f; rating = 5f }
+            val etComentario = EditText(this@MisSesionesActivity).apply {
+                hint = "Comentario (opcional)"
+                minLines = 2
+            }
+
+            val tvTagsLabel = android.widget.TextView(this@MisSesionesActivity).apply {
+                text = "¿Cómo describirías al tarotista?"
+                setPadding(0, 16, 0, 8)
+                setTextColor(android.graphics.Color.DKGRAY)
+            }
+
+            val tagsLayout = LinearLayout(this@MisSesionesActivity).apply {
+                orientation = LinearLayout.VERTICAL
+            }
+            tagLabels.forEachIndexed { i, label ->
+                android.widget.CheckBox(this@MisSesionesActivity).apply {
+                    text = label
+                    setOnCheckedChangeListener { _, checked -> tagChecked[i] = checked }
+                    tagsLayout.addView(this)
                 }
             }
-            .setNegativeButton("Cancelar", null)
-            .show()
+
+            val layout = LinearLayout(this@MisSesionesActivity).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(40, 20, 40, 20)
+                addView(ratingBar)
+                addView(tvTagsLabel)
+                addView(tagsLayout)
+                addView(etComentario)
+            }
+
+            android.app.AlertDialog.Builder(this@MisSesionesActivity)
+                .setTitle("⭐ Califica a ${sesion.nombreTarotista}")
+                .setView(layout)
+                .setPositiveButton("Enviar") { _, _ ->
+                    lifecycleScope.launch {
+                        try {
+                            val tarotistaId = if (sesion.tarotistaId != null && sesion.tarotistaId > 0) {
+                                sesion.tarotistaId
+                            } else {
+                                val resp = RetrofitClient.instance.getTarotistas("Bearer $token")
+                                resp.body()?.data?.find { it.nombreProfesional == sesion.nombreTarotista }?.id ?: 0
+                            }
+                            val tagsStr = tagLabels.filterIndexed { i, _ -> tagChecked[i] }.joinToString(",")
+                            val response = RetrofitClient.instance.crearResena(
+                                "Bearer $token",
+                                ResenaRequest(
+                                    sesionId = sesion.id,
+                                    tarotistaId = tarotistaId,
+                                    usuarioId = idUsuario,
+                                    calificacion = ratingBar.rating.toInt(),
+                                    comentario = etComentario.text.toString().trim(),
+                                    tags = tagsStr
+                                )
+                            )
+                            if (response.isSuccessful) {
+                                Toast.makeText(this@MisSesionesActivity, "¡Gracias por tu calificación!", Toast.LENGTH_SHORT).show()
+                            } else {
+                                val msg = try {
+                                    org.json.JSONObject(response.errorBody()?.string() ?: "").optString("message", "Error al enviar")
+                                } catch (_: Exception) { "Error al enviar" }
+                                Toast.makeText(this@MisSesionesActivity, msg, Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(this@MisSesionesActivity, "Error de conexión", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
     }
 
     private fun mostrarDialogoDisputa(sesion: SesionItem) {

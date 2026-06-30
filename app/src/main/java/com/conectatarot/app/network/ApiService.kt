@@ -113,10 +113,22 @@ interface ApiService {
 
     // Reseñas
     @POST("api/resenas")
-    suspend fun crearResena(@Body request: ResenaRequest): Response<Any>
+    suspend fun crearResena(
+        @Header("Authorization") token: String,
+        @Body request: ResenaRequest
+    ): Response<Any>
 
     @GET("api/resenas/tarotista/{id}")
-    suspend fun getResenasTarotista(@Path("id") id: Int): Response<ResenasResponse>
+    suspend fun getResenasTarotista(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<ResenasResponse>
+
+    @GET("api/resenas/sesion/{sesionId}/existe")
+    suspend fun existeResena(
+        @Header("Authorization") token: String,
+        @Path("sesionId") sesionId: Int
+    ): Response<ExisteResenaResponse>
 
     // Pagos
     @POST("api/pagos/iniciar/{sesionId}")
@@ -279,11 +291,19 @@ data class ResenaRequest(
     val tarotistaId: Int,
     val usuarioId: Int,
     val calificacion: Int,
-    val comentario: String
+    val comentario: String,
+    val tags: String = ""
 )
 
-data class ResenaItem(val id: Int, val calificacion: Int, val comentario: String?)
-data class ResenasResponse(val success: Boolean, val data: List<ResenaItem>?, val promedio: Double)
+data class ResenaItem(
+    val id: Int,
+    val calificacion: Int,
+    val comentario: String? = "",
+    val tags: String? = "",
+    val fecha: String? = ""
+)
+data class ResenasResponse(val success: Boolean, val data: List<ResenaItem>?, val promedio: Double, val total: Int = 0)
+data class ExisteResenaResponse(val existe: Boolean)
 
 data class IniciarPagoResponse(val success: Boolean, val url: String?, val token: String?)
 data class EstadoPagoResponse(val success: Boolean, val estadoPago: String?)
