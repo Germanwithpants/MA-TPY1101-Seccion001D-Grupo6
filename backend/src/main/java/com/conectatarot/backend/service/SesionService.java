@@ -91,7 +91,7 @@ public class SesionService {
     }
 
     public List<SesionResponseDTO> obtenerSesionesTarotista(String email) {
-        return sesionRepository.findByTarotista_Usuario_EmailOrderByFechaAsc(email)
+        return sesionRepository.findByTarotista_Usuario_EmailOrderByFechaDesc(email)
                 .stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
@@ -106,14 +106,14 @@ public class SesionService {
 
         if (estado != null && !estado.isBlank()) {
             sesiones = sesionRepository
-                    .findByTarotista_Usuario_EmailAndEstadoOrderByFechaAsc(
+                    .findByTarotista_Usuario_EmailAndEstadoOrderByFechaDesc(
                             email,
                             estado.toUpperCase(),
                             pageable
                     );
         } else {
             sesiones = sesionRepository
-                    .findByTarotista_Usuario_EmailOrderByFechaAsc(
+                    .findByTarotista_Usuario_EmailOrderByFechaDesc(
                             email,
                             pageable
                     );
@@ -271,7 +271,9 @@ public class SesionService {
                 .duracionMinutos(sesion.getDuracionMinutos())
                 .precioTotal(sesion.getPrecioTotal())
                 .estado(sesion.getEstado())
-		.estadoPago(sesion.getEstadoPago())
+                .estadoPago(sesion.getEstadoPago())
+                .tarotistaId(sesion.getTarotista().getId())
+                .fechaCreacion(sesion.getFechaCreacion())
                 .build();
     }
 }

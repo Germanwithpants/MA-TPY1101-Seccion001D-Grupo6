@@ -24,14 +24,14 @@ public interface SesionRepository extends JpaRepository<Sesion, Integer> {
 
     List<Sesion> findByUsuario_EmailAndTokenWebpayIsNotNullOrderByFechaDesc(String email);
 
-    List<Sesion> findByTarotista_Usuario_EmailOrderByFechaAsc(String email);
+    List<Sesion> findByTarotista_Usuario_EmailOrderByFechaDesc(String email);
 
-    Page<Sesion> findByTarotista_Usuario_EmailOrderByFechaAsc(
+    Page<Sesion> findByTarotista_Usuario_EmailOrderByFechaDesc(
             String email,
             Pageable pageable
     );
 
-    Page<Sesion> findByTarotista_Usuario_EmailAndEstadoOrderByFechaAsc(
+    Page<Sesion> findByTarotista_Usuario_EmailAndEstadoOrderByFechaDesc(
             String email,
             String estado,
             Pageable pageable

@@ -20,4 +20,6 @@ public class SesionResponseDTO {
     private BigDecimal precioTotal;
     private String estado;
     private String estadoPago;
+    private Integer tarotistaId;
+    private LocalDateTime fechaCreacion;
 }

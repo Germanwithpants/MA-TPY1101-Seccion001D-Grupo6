@@ -84,6 +84,9 @@ public class AdminController {
                                                                Authentication auth) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        if (auth != null && usuario.getEmail().equals(auth.getName())) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("No puedes bloquearte a ti mismo"));
+        }
         usuario.setActivo(false);
         usuarioRepository.save(usuario);
         registrarAudit("BLOQUEAR_USUARIO", "Usuario", id.toString(),
