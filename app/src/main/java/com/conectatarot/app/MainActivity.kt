@@ -114,13 +114,44 @@ class MainActivity : AppCompatActivity() {
         }
 
         val dest = when {
-            body.esNuevo        -> SeleccionRolActivity::class.java
+            body.esNuevo             -> SeleccionRolActivity::class.java
             body.rol == "ADMIN"      -> AdminPanelActivity::class.java
-            body.rol == "TAROTISTA" -> TarotistaHomeActivity::class.java
-            else                -> ClienteActivity::class.java
+            body.rol == "TAROTISTA"  -> TarotistaHomeActivity::class.java
+            else                     -> ClienteActivity::class.java
         }
-        startActivity(Intent(this, dest))
-        finish()
+
+        if (body.esNuevo) {
+            mostrarTerminosNuevoUsuario { startActivity(Intent(this, dest)); finish() }
+        } else {
+            startActivity(Intent(this, dest))
+            finish()
+        }
+    }
+
+    private fun mostrarTerminosNuevoUsuario(onAceptar: () -> Unit) {
+        val scroll = android.widget.ScrollView(this)
+        val tv = android.widget.TextView(this).apply {
+            text = "Al usar ConectaTarot aceptas nuestros Términos de Uso y Política de Privacidad. " +
+                "Tus datos personales son tratados conforme a la Ley 19.628 sobre protección de la vida privada (Chile). " +
+                "La información que compartes en la plataforma se usa únicamente para conectarte con tarotistas y gestionar tus sesiones. " +
+                "Puedes solicitar la eliminación de tus datos en cualquier momento escribiendo a soporte@conectatarot.cl.\n\n" +
+                "Para leer la política completa, toca 'Leer política completa' en la pantalla de registro."
+            setPadding(48, 32, 48, 16)
+            textSize = 14f
+            setTextColor(android.graphics.Color.parseColor("#d4aaff"))
+        }
+        scroll.addView(tv)
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Términos de Uso y Privacidad")
+            .setView(scroll)
+            .setCancelable(false)
+            .setPositiveButton("Acepto y continúo") { _, _ -> onAceptar() }
+            .setNegativeButton("Cancelar") { _, _ ->
+                getSharedPreferences("conectatarot", MODE_PRIVATE).edit().clear().apply()
+                Toast.makeText(this, "Debes aceptar los términos para usar la app", Toast.LENGTH_LONG).show()
+            }
+            .show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
