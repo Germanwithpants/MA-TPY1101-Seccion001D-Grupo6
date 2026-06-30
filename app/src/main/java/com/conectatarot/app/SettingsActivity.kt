@@ -105,7 +105,7 @@ class SettingsActivity : AppCompatActivity() {
         // Soporte
         findViewById<View>(R.id.rowSoporte).setOnClickListener {
             startActivity(Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:soporte@conectatarot.com")
+                data = Uri.parse("mailto:ric.gaete@duocuc.cl")
                 putExtra(Intent.EXTRA_SUBJECT, "Soporte ConectaTarot")
             })
         }
