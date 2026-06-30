@@ -117,6 +117,13 @@ class DisponibilidadActivity : AppCompatActivity() {
             btnAgregar.isEnabled = false
             lifecycleScope.launch {
                 if (tarotistaId == 0) tarotistaId = TarotistaUtils.resolverIdTarotista(token, prefs)
+                if (tarotistaId == 0) {
+                    Toast.makeText(this@DisponibilidadActivity,
+                        "No se encontró tu perfil. Ve a 'Mi Perfil' y guarda tus datos primero.",
+                        Toast.LENGTH_LONG).show()
+                    btnAgregar.isEnabled = true
+                    return@launch
+                }
                 try {
                     val resp = RetrofitClient.instance.addDisponibilidad(
                         "Bearer $token", tarotistaId,

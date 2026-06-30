@@ -47,6 +47,11 @@ interface ApiService {
     @POST("api/tarotistas")
     suspend fun registrarTarotista(@Body request: RegistroTarotistaRequest): Response<RegistroResponse>
 
+    @GET("api/tarotistas/me")
+    suspend fun getMiPerfilTarotista(
+        @Header("Authorization") token: String
+    ): Response<TarotistaResponse>
+
     @GET("api/tarotistas/usuario/{usuarioId}")
     suspend fun getTarotistaByUsuario(
         @Header("Authorization") token: String,

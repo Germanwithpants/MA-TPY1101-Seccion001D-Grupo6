@@ -11,7 +11,15 @@ object TarotistaUtils {
 
         val idUsuario = prefs.getInt("idUsuario", 0)
 
-        // 1. Direct lookup by usuarioId — works even for pending/new tarotistas
+        // 1. /me endpoint — returns current user's own tarotista profile
+        try {
+            val id = RetrofitClient.instance
+                .getMiPerfilTarotista("Bearer $token")
+                .body()?.data?.id ?: 0
+            if (id != 0) { prefs.edit().putInt("idTarotista", id).apply(); return id }
+        } catch (_: Exception) {}
+
+        // 2. Direct lookup by usuarioId
         if (idUsuario != 0) {
             try {
                 val id = RetrofitClient.instance
@@ -21,7 +29,7 @@ object TarotistaUtils {
             } catch (_: Exception) {}
         }
 
-        // 2. Try sessions — each session carries tarotistaId
+        // 3. Try sessions — each session carries tarotistaId
         try {
             val id = RetrofitClient.instance
                 .getSesionesTarotista("Bearer $token")
