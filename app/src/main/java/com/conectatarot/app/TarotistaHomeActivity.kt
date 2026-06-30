@@ -26,9 +26,8 @@ class TarotistaHomeActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
         token = prefs.getString("token", "") ?: ""
-        val nombre = prefs.getString("nombre", "Tarotista") ?: "Tarotista"
 
-        findViewById<TextView>(R.id.tvBienvenidoTarotista).text = "🔮 Bienvenida, $nombre"
+        actualizarBienvenida()
         rvAgenda = findViewById(R.id.rvAgenda)
         tvEmpty = findViewById(R.id.tvEmptyAgenda)
         progressAgenda = findViewById(R.id.progressAgenda)
@@ -81,6 +80,19 @@ class TarotistaHomeActivity : AppCompatActivity() {
                 Toast.makeText(this@TarotistaHomeActivity, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        actualizarBienvenida()
+    }
+
+    private fun actualizarBienvenida() {
+        val prefs = getSharedPreferences("conectatarot", MODE_PRIVATE)
+        val nombrePro = prefs.getString("nombreProfesional", "").orEmpty()
+        val nombre    = prefs.getString("nombre", "Tarotista").orEmpty()
+        val display   = nombrePro.ifBlank { nombre }
+        findViewById<TextView>(R.id.tvBienvenidoTarotista).text = "🔮 Bienvenida, $display"
     }
 
     private fun esPasada(s: com.conectatarot.app.network.SesionItem): Boolean = try {

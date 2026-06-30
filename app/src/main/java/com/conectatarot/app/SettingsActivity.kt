@@ -34,9 +34,13 @@ class SettingsActivity : AppCompatActivity() {
         val version = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { "1.0.0" }
         findViewById<TextView>(R.id.tvVersion).text = version
 
-        // Editar perfil
+        // Editar perfil — tarotistas van a su perfil profesional
+        val esTarotista = prefs.getString("rol", "") == "TAROTISTA"
         findViewById<View>(R.id.rowEditarPerfil).setOnClickListener {
-            startActivity(Intent(this, PerfilActivity::class.java))
+            if (esTarotista)
+                startActivity(Intent(this, PerfilTarotistaActivity::class.java))
+            else
+                startActivity(Intent(this, PerfilActivity::class.java))
         }
 
         // Cambiar contraseña — implementado
