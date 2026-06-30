@@ -221,8 +221,8 @@ class AdminPanelActivity : AppCompatActivity() {
                 progress.visibility = View.GONE
                 if (resp.isSuccessful) {
                     val lista = resp.body()?.data ?: emptyList()
-                    if (lista.isEmpty()) tvEmpty.visibility = View.VISIBLE
-                    else tarotistasAdapter.update(lista)
+                    tarotistasAdapter.update(lista)
+                    tvEmpty.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
                 }
             } catch (e: Exception) {
                 progress.visibility = View.GONE
